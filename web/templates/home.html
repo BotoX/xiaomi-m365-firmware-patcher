@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="author" content="BotoX">
+<meta name="description" content="Xiaomi Mijia M365 Custom Firmware Toolkit">
+</head>
+
+<body>
+<h1>Xiaomi Mijia M365 Custom Firmware Toolkit</h1>
+
+<p>
+    Configure your own custom firmware by adjusting the options below.<br>
+    <b>Warning: You alone are responsible for the entered values!</b><br>
+    I have added some safety checks but please don't go crazy, it's your scooter after all.<br>
+    The default values are what I use on my scooter.
+</p>
+
+<hr>
+<form action="/cfw">
+<ul>
+    <li><p>
+        Base version of your firmware:
+        <select name="version">
+            <option value="DRV138" selected>1.3.8</option>
+            <option value="DRV134">1.3.4</option>
+            <option value="DRV130">1.3.0</option>
+        </select>
+    </p></li>
+
+    <li><p>
+        KERS min speed:
+        <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="35.0">
+        <br>
+        Speed in km/h at which the scooter will start breaking on it's own when the engine is not active.
+    </p></li>
+
+    <li><p>
+        Maximum speed in Normal mode:
+        <input name="normal_max_speed" type="number" step="1" min="0" max="100" value="31">
+        <br>
+        The scooter will stay below this, add +1 to actually drive this fast.
+    </p></li>
+
+    <li><p>
+        Maximum speed in ECO mode:
+        <input name="eco_max_speed" type="number" step="1" min="0" max="100" value="26">
+        <br>
+        The scooter will stay below this, add +1 to actually drive this fast.
+    </p></li>
+
+    <li><p>
+        Motor start speed:
+        <input name="motor_start_speed" type="number" step="0.1" min="0" max="100" value="3.0">
+        <br>
+        Minimum speed in km/h before the engine will start.
+    </p></li>
+
+    <li><p>
+        Engine power constant:
+        <input name="motor_power_constant" type="number" step="1" min="25787" max="65535" value="40165">
+        <br>
+        Lower = More power.<br>
+        Original = 51575, DYoC = 40165, CFW2.0Weak = 27877, CFW2.0 = 25787
+    </p></li>
+
+    <li><p>
+        Instant mode switch:
+        <input type="checkbox" name="instant_eco_switch" value="1" checked>
+        <br>
+        Switch instantly between ECO and Normal Mode while driving.
+    </p></li>
+
+    <li><p>
+        Some patch that all custom firmwares have:
+        <input type="checkbox" name="idk_what_this_does" value="1" checked>
+        <br>
+        And I honestly don't know what it's for, maybe you can tell me?
+    </p></li>
+
+</ul>
+<hr>
+
+<p>
+    Make sure to double check all of your entered values before submitting!<br>
+    <b>I HAVE NOONE BUT MYSELF TO BLAME IF SOMETHING GOES WRONG:</b>
+    <input type="submit" value="Patch!">
+</p>
+</form>
+
+<br>
+<hr>
+Fork me on GitHub! <a href="https://github.com/BotoX/xiaomi-m365-firmware-patcher">https://github.com/BotoX/xiaomi-m365-firmware-patcher</a>
+</body>

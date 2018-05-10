@@ -66,21 +66,21 @@ class FirmwarePatcher():
         self.data = bytearray(data)
 
     def kers_min_speed(self, kmh):
-        val = struct.pack('<H', kmh * 345)
+        val = struct.pack('<H', int(kmh * 345))
         sig = [0x25, 0x68, 0x40, 0xF6, 0x16, 0x07, 0xBD, 0x42]
         ofs = FindPattern(self.data, sig) + 2
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         return [(ofs, pre, post)]
 
     def normal_max_speed(self, kmh):
-        val = struct.pack('<B', kmh)
+        val = struct.pack('<B', int(kmh))
         sig = [0x04, 0xE0, 0x21, 0x85, 0x1C, 0x21, 0xE1, 0x83]
         ofs = FindPattern(self.data, sig) + 4
         pre, post = PatchImm(self.data, ofs, 2, val, MOVS_T1_IMM)
         return [(ofs, pre, post)]
 
     def eco_max_speed(self, kmh):
-        val = struct.pack('<B', kmh)
+        val = struct.pack('<B', int(kmh))
         sig = [0x00, 0xE0, 0x22, 0x85, 0x16, 0x22, 0xE2, 0x83]
         ofs = FindPattern(self.data, sig) + 4
         pre, post = PatchImm(self.data, ofs, 2, val, MOVS_T1_IMM)
@@ -95,7 +95,7 @@ class FirmwarePatcher():
         return [(ofs, pre, post)]
 
     def motor_start_speed(self, kmh):
-        val = struct.pack('<H', kmh * 345)
+        val = struct.pack('<H', int(kmh * 345))
         sig = [0xF0, 0xB4, None, 0x4C, 0x26, 0x68, 0x40, 0xF2, 0xBD, 0x67]
         ofs = FindPattern(self.data, sig) + 6
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
@@ -107,7 +107,7 @@ class FirmwarePatcher():
     # CFW W = 27877 (~850 Watt)
     # CFW = 25787 (~1000 Watt)
     def motor_power_constant(self, val):
-        val = struct.pack('<H', val)
+        val = struct.pack('<H', int(val))
         ret = []
         sig = [0x31, 0x68, 0x2A, 0x68, 0x09, 0xB2, 0x09, 0x1B, 0x12, 0xB2, 0xD3, 0x1A, 0x4C, 0xF6, 0x77, 0x12]
         ofs = FindPattern(self.data, sig) + 12
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     cfw.eco_max_speed(26)
     cfw.idk_what_this_does()
     cfw.motor_start_speed(3)
-    cfw.motor_power_constant(0x9CE5)
+    cfw.motor_power_constant(40165)
     cfw.instant_eco_switch()
 
     with open(sys.argv[2], 'wb') as fp:
