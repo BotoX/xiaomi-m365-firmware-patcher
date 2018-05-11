@@ -113,8 +113,9 @@ class FirmwarePatcher():
         ofs = FindPattern(self.data, sig) + 12
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         ret.append((ofs, pre, post))
+        ofs += 4
 
-        ofs += 8
+        ofs += 4
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         ret.append((ofs, pre, post))
 
@@ -122,8 +123,9 @@ class FirmwarePatcher():
         ofs = FindPattern(self.data, sig, None, ofs, 100) + 2
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         ret.append((ofs, pre, post))
+        ofs += 4
 
-        ofs += 8
+        ofs += 4
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         ret.append((ofs, pre, post))
 
@@ -140,8 +142,8 @@ class FirmwarePatcher():
         pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
-
         ofs += 2
+
         pre, post = self.data[ofs:ofs+2], bytearray((0x0A, 0xE0))
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
@@ -151,19 +153,38 @@ class FirmwarePatcher():
         pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
-
         ofs += 2
+
         pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
-
         ofs += 2
+
         pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
 
         sig = [0x85, 0xF8, 0x34, 0x60, 0x02, 0xE0, 0x0B, 0xB9]
         ofs = FindPattern(self.data, sig, None, ofs, 100) + 6
+        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
+        self.data[ofs:ofs+2] = post
+        ret.append((ofs, pre, post))
+        return ret
+
+    def boot_with_eco(self):
+        ret = []
+        sig = [0xB4, 0xF8, 0xEA, 0x20, 0x01, 0x2A, 0x02, 0xD1, 0x00, 0xF8, 0x34, 0x1F, 0x01, 0x72]
+        ofs = FindPattern(self.data, sig)
+        pre, post = self.data[ofs:ofs+4], bytearray((0xA4, 0xF8, 0xEA, 0x10))
+        self.data[ofs:ofs+4] = post
+        ret.append((ofs, pre, post))
+        ofs += 4
+
+        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
+        self.data[ofs:ofs+2] = post
+        ret.append((ofs, pre, post))
+        ofs += 2
+
         pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
@@ -191,6 +212,7 @@ if __name__ == "__main__":
     cfw.motor_start_speed(3)
     cfw.motor_power_constant(40165)
     cfw.instant_eco_switch()
+    #cfw.boot_with_eco()
 
     with open(sys.argv[2], 'wb') as fp:
         fp.write(cfw.data)

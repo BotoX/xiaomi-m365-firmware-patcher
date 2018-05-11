@@ -1,6 +1,7 @@
 import flask
 import traceback
 import sys
+sys.path.append('..')
 from patcher import FirmwarePatcher
 
 app = flask.Flask(__name__)
@@ -59,6 +60,10 @@ def patch_firmware():
     instant_eco_switch = flask.request.args.get('instant_eco_switch', None)
     if instant_eco_switch:
         patcher.instant_eco_switch()
+
+    boot_with_eco = flask.request.args.get('boot_with_eco', None)
+    if boot_with_eco:
+        patcher.boot_with_eco()
 
     idk_what_this_does = flask.request.args.get('idk_what_this_does', None)
     if idk_what_this_does:
