@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from binascii import hexlify
 import struct
+import keystone
 
 # https://web.eecs.umich.edu/~prabal/teaching/eecs373-f10/readings/ARMv7-M_ARM.pdf
 MOVW_T3_IMM = [*[None]*5, 11, *[None]*6, 15, 14, 13, 12, None, 10, 9, 8, *[None]*4, 7, 6, 5, 4, 3, 2, 1, 0]
@@ -64,6 +65,7 @@ def FindPattern(data, signature, mask=None, start=None, maxit=None):
 class FirmwarePatcher():
     def __init__(self, data):
         self.data = bytearray(data)
+        self.ks = keystone.Ks(keystone.KS_ARCH_ARM, keystone.KS_MODE_THUMB)
 
     def kers_min_speed(self, kmh):
         val = struct.pack('<H', int(kmh * 345))
@@ -190,6 +192,16 @@ class FirmwarePatcher():
         ret.append((ofs, pre, post))
         return ret
 
+    def cruise_control_delay(self, delay):
+        delay = int(delay * 200)
+        assert delay.bit_length() <= 12, 'bit length overflow'
+        sig = [0x35, 0x48, 0xB0, 0xF8, 0xF8, 0x10, 0x34, 0x4B, 0x4F, 0xF4, 0x7A, 0x70, 0x01, 0x29]
+        ofs = FindPattern(self.data, sig) + 8
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('MOV.W R0, #{:n}'.format(delay))[0])
+        self.data[ofs:ofs+4] = post
+        return [(ofs, pre, post)]
+
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -213,6 +225,7 @@ if __name__ == "__main__":
     cfw.motor_power_constant(40165)
     cfw.instant_eco_switch()
     #cfw.boot_with_eco()
+    #cfw.cruise_control_delay(5)
 
     with open(sys.argv[2], 'wb') as fp:
         fp.write(cfw.data)

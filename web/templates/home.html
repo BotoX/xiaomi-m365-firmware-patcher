@@ -42,7 +42,7 @@
     <li><p>
         KERS min speed:
         <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>
-        <label><input class="_patchbs" type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
+        <label><input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
         <br>
         Speed in km/h at which the scooter will start braking on it's own when the engine is not active.
     </p></li>
@@ -50,7 +50,7 @@
     <li><p>
         Maximum speed in Normal mode:
         <input name="normal_max_speed" type="number" step="1" min="0" max="100" value="28" disabled>
-        <label><input class="_patchbs" type="checkbox" onchange="CheckForm('normal_max_speed', this);">Patch?</label>
+        <label><input type="checkbox" onchange="CheckForm('normal_max_speed', this);">Patch?</label>
         <br>
         The scooter will stay below this, add +1 to actually drive this fast.
     </p></li>
@@ -58,7 +58,7 @@
     <li><p>
         Maximum speed in ECO mode:
         <input name="eco_max_speed" type="number" step="1" min="0" max="100" value="22" disabled>
-        <label><input class="_patchbs" type="checkbox" onchange="CheckForm('eco_max_speed', this);">Patch?</label>
+        <label><input type="checkbox" onchange="CheckForm('eco_max_speed', this);">Patch?</label>
         <br>
         The scooter will stay below this, add +1 to actually drive this fast.
     </p></li>
@@ -66,7 +66,7 @@
     <li><p>
         Motor start speed:
         <input name="motor_start_speed" type="number" step="0.1" min="0" max="100" value="5.0" disabled>
-        <label><input class="_patchbs" type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
+        <label><input type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
         <br>
         Minimum speed in km/h before the engine will start.
     </p></li>
@@ -74,10 +74,18 @@
     <li><p>
         Motor power constant:
         <input name="motor_power_constant" type="number" step="1" min="25787" max="65535" value="51575" disabled>
-        <label><input class="_patchbs" type="checkbox" onchange="CheckForm('motor_power_constant', this);">Patch?</label>
+        <label><input type="checkbox" onchange="CheckForm('motor_power_constant', this);">Patch?</label>
         <br>
         Lower = More power.<br>
         Original = 51575, DYoC = 40165, CFW2.0Weak = 27877, CFW2.0 = 25787
+    </p></li>
+
+    <li><p>
+        Cruise control delay:
+        <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>
+        <label><input type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label>
+        <br>
+        How many seconds it takes for cruise control to kick in.
     </p></li>
 
     <li><p>
@@ -111,12 +119,21 @@
 </p>
 </form>
 
-<br>
+<p>
+    Use the following app to flash your modified firmware: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2F&files=com.m365downgrade-v7_PATCHED.apk">com.m365downgrade-v7_PATCHED.apk</a>
+    <br>
+    It is a patched version of the <a href="https://play.google.com/store/apps/details?id=com.m365downgrade">M365 DownG</a> app made by <a href="https://github.com/CamiAlfa">CamiAlfa</a>.
+</p>
+
+<p>
+    Update your BMS firmware to the latest version: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2FUNTOUCHED&files=BMS115.bin">BMS115.bin</a>
+</p>
+
 <hr>
 <p>
     Fork me on GitHub! <a href="https://github.com/BotoX/xiaomi-m365-firmware-patcher" target="_blank">https://github.com/BotoX/xiaomi-m365-firmware-patcher</a>
     <br>
-    Donate, if you'd like: <a href="https://paypal.me/BotoX" target="_blank">https://paypal.me/BotoX</a>
+    Donate, if you'd like: <a href="https://paypal.me/BotoXbz" target="_blank">https://paypal.me/BotoXbz</a>
 </p>
 
 <script type="text/javascript">
@@ -146,6 +163,7 @@
         ChangeForm("eco_max_speed", "22", false);
         ChangeForm("motor_start_speed", "5.0", false);
         ChangeForm("motor_power_constant", "51575", false);
+        ChangeForm("cruise_control_delay", "5", false);
         ChangeForm("instant_eco_switch", false);
         ChangeForm("boot_with_eco", false);
         ChangeForm("idk_what_this_does", false);
@@ -157,6 +175,7 @@
         ChangeForm("eco_max_speed", "26", true);
         ChangeForm("motor_start_speed", "3.0", true);
         ChangeForm("motor_power_constant", "40165", true);
+        ChangeForm("cruise_control_delay", "5", false);
         ChangeForm("instant_eco_switch", true);
         ChangeForm("boot_with_eco", false);
         ChangeForm("idk_what_this_does", true);
@@ -168,6 +187,7 @@
         ChangeForm("eco_max_speed", "20", true);
         ChangeForm("motor_start_speed", "2.0", true);
         ChangeForm("motor_power_constant", "40165", true);
+        ChangeForm("cruise_control_delay", "5", false);
         ChangeForm("instant_eco_switch", false);
         ChangeForm("boot_with_eco", false);
         ChangeForm("idk_what_this_does", true);
@@ -179,6 +199,7 @@
         ChangeForm("eco_max_speed", "27", true);
         ChangeForm("motor_start_speed", "1.45", true);
         ChangeForm("motor_power_constant", "27877", true);
+        ChangeForm("cruise_control_delay", "5", false);
         ChangeForm("instant_eco_switch", false);
         ChangeForm("boot_with_eco", false);
         ChangeForm("idk_what_this_does", true);

@@ -57,6 +57,12 @@ def patch_firmware():
         assert motor_power_constant >= 25787 and motor_power_constant <= 65535
         patcher.motor_power_constant(motor_power_constant)
 
+    cruise_control_delay = flask.request.args.get('cruise_control_delay', None)
+    if cruise_control_delay is not None:
+        cruise_control_delay = float(cruise_control_delay)
+        assert cruise_control_delay >= 0.1 and cruise_control_delay <= 20.0
+        patcher.cruise_control_delay(cruise_control_delay)
+
     instant_eco_switch = flask.request.args.get('instant_eco_switch', None)
     if instant_eco_switch:
         patcher.instant_eco_switch()
