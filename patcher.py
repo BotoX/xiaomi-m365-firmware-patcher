@@ -224,8 +224,8 @@ if __name__ == "__main__":
     cfw.motor_start_speed(3)
     cfw.motor_power_constant(40165)
     cfw.instant_eco_switch()
-    #cfw.boot_with_eco()
-    #cfw.cruise_control_delay(5)
+    cfw.boot_with_eco()
+    cfw.cruise_control_delay(5)
 
     with open(sys.argv[2], 'wb') as fp:
         fp.write(cfw.data)
