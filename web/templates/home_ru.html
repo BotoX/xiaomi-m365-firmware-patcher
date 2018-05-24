@@ -3,48 +3,46 @@
 <head>
     <meta charset="utf-8">
     <meta name="author" content="BotoX">
-    <meta name="description" content="Xiaomi Mijia M365 Custom Firmware Toolkit">
-    <title>Xiaomi Mijia M365 Custom Firmware Toolkit</title>
+    <meta name="description" content="КОНСТРУКТОР ПРОШИВОК XIAOMI MIJIA M365">
+    <title>КОНСТРУКТОР ПРОШИВОК XIAOMI MIJIA M365</title>
     <link rel="stylesheet" type="text/css" media="screen" href="style.css"/>
 </head>
 
 <body>
-    <h1 lang="en">XIAOMI MIJIA M365 CUSTOM FIRMWARE TOOLKIT</h1>
+    <h1 lang="ru">КОНСТРУКТОР ПРОШИВОК XIAOMI MIJIA M365</h1>
 
-    <select id="lang_select" onchange="javascript:location.href = this.value;">
-            <option value="" selected>Choose language</option>
-            <option value="home.html">English</option>
-            <option value="home_ru.html">Русский</option>
+    <select id="lang_select" onchange="javascript:location.href = this.value;" style="display: flex; justify-content: center;">
+        <option value="" selected>Выберите язык</option>
+        <option value="home.html">English</option>
+        <option value="home_ru.html">Русский</option>
     </select>
+
+    <p>
+        Настройте прошику по своему усмотрению используя опции ниже.<br>
+        <b>ВНИМАНИЕ: Вы и только ВЫ ответственны за введенные значения!</b><br>
+        Я добавил несколько проверок на безопасность, но, пожалуйста, будьте осторожны, это всё-таки ваш самокат.<br>
+        По-умолчанию ничего не будет модифицировано, включите модификации селектором.
+    </p>
+
+    <p>
     
-    <div class="disclaimer">
-        <p>
-            Configure your own custom firmware by adjusting the options below.<br>
-            <b>Warning: You alone are responsible for the entered values!</b><br>
-            I have added some safety checks but please don't go crazy, it's your scooter after all.<br>
-            By default nothing will be patched, enable patches with the "Patch?" checkbox next to them.
-        </p>
+    </p>
 
-        <p>
-        
-        </p>
+    <noscript>Этому сайту (несмотря на внешний вид) нужно несколько очень простых JavaScript-скриптов, которые включены в html-код.</noscript>
 
-        <noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
-
-        <p style="display: flex; justify-content: center;">
-        Presets:
-            <button onclick="Preset_Default();">Default</button>
-            <button onclick="Preset_Mine();">Mine</button>
-            <button onclick="Preset_DYoC();">DYoC</button>
-            <button onclick="Preset_CFWW();">CFW W</button>
-        </p>
-    </div>
+    <p style="display: flex; justify-content: center;">
+    Пресеты: 
+        <button onclick="Preset_Default();">По-умолчанию</button>
+        <button onclick="Preset_Mine();">Авторская</button>
+        <button onclick="Preset_DYoC();">DYoC</button>
+        <button onclick="Preset_CFWW();">CFW W</button>
+    </p>
 
     <form action="/cfw">
         <table>
             <tr>
                 <th colspan="3">
-                    Base version of your firmware:
+                    Базовая версия прошивки:
                     <select id="version">
                         <option value="DRV140" selected>1.4.0</option>
                         <option value="DRV138">1.3.8</option>
@@ -54,72 +52,71 @@
                 </th>
             </tr>
             <tr>
-                <td title="Speed in km/h at which the scooter will start braking on it's own when the engine is not active.">KERS min speed</td>
+                <td title="Скорость в км/ч при которой самокат начнет тормозить сам, когда мотор не активен.">Мин. скорость для KERS</td>
                 <td><input id="kers_min_speed_chk" type="checkbox" onchange="CheckForm('kers_min_speed', this);"><label for="kers_min_speed_chk"></label></td>
                 <td><input id="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled></td>
             </tr>
             <tr>
-                <td title="The scooter will stay below this, add +1 to actually drive this fast.">Maximum speed in Normal mode</td>
+                <td title="Самокат будет держать скорость ДО этого значения, добавьте +1 для достижения желаемой скорости.">Макс. скорость в нормальном режиме</td>
                 <td><input id="normal_max_speed_chk" type="checkbox" onchange="CheckForm('normal_max_speed', this);"><label for="normal_max_speed_chk"></label></td>
                 <td><input id="normal_max_speed" type="number" step="1" min="0" max="100" value="28" disabled></td>
             </tr>
             <tr>
-                <td title="The scooter will stay below this, add +1 to actually drive this fast.">Maximum speed in ECO mode</td>
+                <td title="Самокат будет держать скорость ДО этого значения, добавьте +1 для достижения желаемой скорости.">Макс. скорость в ЭКО режиме</td>
                 <td><input id="eco_max_speed_chk" type="checkbox" onchange="CheckForm('eco_max_speed', this);"><label for="eco_max_speed_chk"></label></td>
                 <td><input id="eco_max_speed" type="number" step="1" min="0" max="100" value="22" disabled></td>
             </tr>
             <tr>
-                <td title="Minimum speed in km/h before the engine will start.">Motor start speed</td>
+                <td title="Минимальная скорость в км/ч при которой запустится мотор.">Стартовая скорость мотора</td>
                 <td><input id="motor_start_speed_chk" type="checkbox" onchange="CheckForm('motor_start_speed', this);"><label for="motor_start_speed_chk"></label></td>
                 <td><input id="motor_start_speed" type="number" step="0.1" min="0" max="100" value="5.0" disabled></td>
             </tr>
             <tr>
-                <td title="Lower = More power.&#013 &#013Original = 51575&#013DYoC = 40165&#013CFW2.0Weak = 27877&#013CFW2.0 = 25787">Motor power constant</td>
+                <td title="Значение ниже = больше мощности.&#013 &#013Оригинал = 51575&#013DYoC = 40165&#013CFW2.0Weak = 27877&#013CFW2.0 = 25787">Мощность мотора</td>
                 <td><input id="motor_power_constant_chk" type="checkbox" onchange="CheckForm('motor_power_constant', this);"><label for="motor_power_constant_chk"></label></td>
-                <td><input title="Lower = More power.&#013 &#013Original = 51575&#013DYoC = 40165&#013CFW2.0Weak = 27877&#013CFW2.0 = 25787" id="motor_power_constant" type="number" step="1" min="25787" max="65535" value="51575" disabled></td>
+                <td><input title="Значение ниже = больше мощности.&#013 &#013Оригинал = 51575&#013DYoC = 40165&#013CFW2.0Weak = 27877&#013CFW2.0 = 25787" id="motor_power_constant" type="number" step="1" min="25787" max="65535" value="51575" disabled></td>
             </tr>
             <tr>
-                <td title="How many seconds it takes for cruise control to kick in.">Cruise control delay</td>
+                <td title="Интервал в секундах, в течение которого подключится круи-контроль">Задержка включения круиз-контроля</td>
                 <td><input id="cruise_control_delay_chk" type="checkbox" onchange="CheckForm('cruise_control_delay', this);"><label for="cruise_control_delay_chk"></label></td>
                 <td><input id="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled></td>
             </tr>
             <tr>
-                <td title="Switch instantly between ECO and Normal mode while driving.">Instant mode switch</td>
+                <td title="Мгновенно переключать режимы ЭКО и нормальный при езде.">Мгновенное переключение режима</td>
                 <td colspan="2"><input type="checkbox" id="instant_eco_switch"><label for="instant_eco_switch"></label></td>
             </tr>
             <tr>
-                <td title="The scooter will always start in ECO mode.">Boot with ECO mode</td>
+                <td title="Самокат будет всегда включаться с активным ЭКО-режимом.">Включение в ЭКО-режимеe</td>
                 <td colspan="2"><input type="checkbox" id="boot_with_eco"><label for="boot_with_eco"></td>
             </tr>
             <tr>
-                <td title="And I honestly don't know what it's for, maybe you can tell me?">Some patch that all custom firmwares have</td>
+                <td title="И я честно не знаю, для чего он, может подскажете?">Какой-то патч, который есть во всех прошивках</td>
                 <td colspan="2"><input type="checkbox" id="idk_what_this_does"><label for="idk_what_this_does"></td>
             </tr>
             <tr>
                 <td colspan="3" style="text-align: center">
-                    Make sure to double check all of your entered values before submitting!<br>
-                    <b>I HAVE NOONE BUT MYSELF TO BLAME IF SOMETHING GOES WRONG:</b><br>
-                    <input type="submit" value="Patch!">
+                    Дважды проверьте все введенные значения перед отправкой!<br>
+                    <span style="color: red; font-size: 125%;"><b>МНЕ НЕКОГО ВИНИТЬ КРОМЕ СЕБЯ ЕСЛИ ЧТО-ТО ПОЙДЕТ НЕ ТАК:</b></span><br>
+                    <input type="submit" value="СКАЧАТЬ">
                 </td>
             </tr>
         </table>
     </form>
-
     <p>
-        Use the following app to flash your modified firmware: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2F&files=com.m365downgrade-v7_PATCHED.apk">com.m365downgrade-v7_PATCHED.apk</a>
+        Используйте это приложение для прошивки: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2F&files=com.m365downgrade-v7_PATCHED.apk">com.m365downgrade-v7_PATCHED.apk</a>
         <br>
-        It is a patched version of the <a href="https://play.google.com/store/apps/details?id=com.m365downgrade">M365 DownG</a> app made by <a href="https://github.com/CamiAlfa">CamiAlfa</a>.
+        Это патченная версия приложения <a href="https://play.google.com/store/apps/details?id=com.m365downgrade">M365 DownG</a> от автора <a href="https://github.com/CamiAlfa">CamiAlfa</a>.
     </p>
 
     <p>
-        Update your BMS firmware to the latest version: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2FUNTOUCHED&files=BMS115.bin">BMS115.bin</a>
+        Обновите свой BMS до последней версии: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2FUNTOUCHED&files=BMS115.bin">BMS115.bin</a>
     </p>
 
     <hr>
     <p>
-        Fork me on GitHub! <a href="https://github.com/BotoX/xiaomi-m365-firmware-patcher" target="_blank">https://github.com/BotoX/xiaomi-m365-firmware-patcher</a>
+        Проект на GitHub! <a href="https://github.com/BotoX/xiaomi-m365-firmware-patcher" target="_blank">https://github.com/BotoX/xiaomi-m365-firmware-patcher</a>
         <br>
-        Donate, if you'd like: <a href="https://paypal.me/BotoXbz" target="_blank">https://paypal.me/BotoXbz</a>
+        Можете задонатить чуток: <a href="https://paypal.me/BotoXbz" target="_blank">https://paypal.me/BotoXbz</a>
     </p>
 
     <script type="text/javascript">
