@@ -24,108 +24,85 @@
     </p>
 
     <p>
-    Presets:
-        <button onclick="Preset_Default();">Default</button>
-        <button onclick="Preset_Mine();">Mine</button>
-        <button onclick="Preset_DYoC();">DYoC</button>
-        <button onclick="Preset_CFWW();">CFW W</button>
+    
     </p>
 
     <noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
 
-    <hr>
     <form action="/cfw">
-        <ul>
-            <li><p>
-                Base version of your firmware:
-                <select name="version">
-                    <option value="DRV140" selected>1.4.0</option>
-                    <option value="DRV138">1.3.8</option>
-                    <option value="DRV134">1.3.4</option>
-                    <option value="DRV130">1.3.0</option>
-                </select>
-            </p></li>
-
-            <li><p>
-                KERS min speed:
-                <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>
-                <label><input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
-                <br>
-                Speed in km/h at which the scooter will start braking on it's own when the engine is not active.
-            </p></li>
-
-            <li><p>
-                Maximum speed in Normal mode:
-                <input name="normal_max_speed" type="number" step="1" min="0" max="100" value="28" disabled>
-                <label><input type="checkbox" onchange="CheckForm('normal_max_speed', this);">Patch?</label>
-                <br>
-                The scooter will stay below this, add +1 to actually drive this fast.
-            </p></li>
-
-            <li><p>
-                Maximum speed in ECO mode:
-                <input name="eco_max_speed" type="number" step="1" min="0" max="100" value="22" disabled>
-                <label><input type="checkbox" onchange="CheckForm('eco_max_speed', this);">Patch?</label>
-                <br>
-                The scooter will stay below this, add +1 to actually drive this fast.
-            </p></li>
-
-            <li><p>
-                Motor start speed:
-                <input name="motor_start_speed" type="number" step="0.1" min="0" max="100" value="5.0" disabled>
-                <label><input type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
-                <br>
-                Minimum speed in km/h before the engine will start.
-            </p></li>
-
-            <li><p>
-                Motor power constant:
-                <input name="motor_power_constant" type="number" step="1" min="25787" max="65535" value="51575" disabled>
-                <label><input type="checkbox" onchange="CheckForm('motor_power_constant', this);">Patch?</label>
-                <br>
-                Lower = More power.<br>
-                Original = 51575, DYoC = 40165, CFW2.0Weak = 27877, CFW2.0 = 25787
-            </p></li>
-
-            <li><p>
-                Cruise control delay:
-                <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>
-                <label><input type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label>
-                <br>
-                How many seconds it takes for cruise control to kick in.
-            </p></li>
-
-            <li><p>
-                Instant mode switch:
-                <label><input type="checkbox" name="instant_eco_switch"></label>
-                <br>
-                Switch instantly between ECO and Normal mode while driving.
-            </p></li>
-
-            <li><p>
-                Boot with ECO mode:
-                <label><input type="checkbox" name="boot_with_eco"></label>
-                <br>
-                The scooter will always start in ECO mode.
-            </p></li>
-
-            <li><p>
-                Some patch that all custom firmwares have:
-                <label><input type="checkbox" name="idk_what_this_does"></label>
-                <br>
-                And I honestly don't know what it's for, maybe you can tell me?
-            </p></li>
-
-        </ul>
-    <hr>
-
-        <p>
-            Make sure to double check all of your entered values before submitting!<br>
-            <b>I HAVE NOONE BUT MYSELF TO BLAME IF SOMETHING GOES WRONG:</b>
-            <input type="submit" value="Patch!">
-        </p>
+        <table>
+            <tr>
+                <th colspan="3">
+                    Presets:
+                    <button onclick="Preset_Default();">Default</button>
+                    <button onclick="Preset_Mine();">Mine</button>
+                    <button onclick="Preset_DYoC();">DYoC</button>
+                    <button onclick="Preset_CFWW();">CFW W</button>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    Base version of your firmware:
+                    <select id="version">
+                        <option value="DRV140" selected>1.4.0</option>
+                        <option value="DRV138">1.3.8</option>
+                        <option value="DRV134">1.3.4</option>
+                        <option value="DRV130">1.3.0</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td title="Speed in km/h at which the scooter will start braking on it's own when the engine is not active.">KERS min speed</td>
+                <td><label><input id="kers_min_speed_chk" type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label></td>
+                <td><input id="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled></td>
+            </tr>
+            <tr>
+                <td title="The scooter will stay below this, add +1 to actually drive this fast.">Maximum speed in Normal mode</td>
+                <td><label><input id="normal_max_speed_chk" type="checkbox" onchange="CheckForm('normal_max_speed', this);">Patch?</label></td>
+                <td><input id="normal_max_speed" type="number" step="1" min="0" max="100" value="28" disabled></td>
+            </tr>
+            <tr>
+                <td title="The scooter will stay below this, add +1 to actually drive this fast.">Maximum speed in ECO mode</td>
+                <td><label><input id="eco_max_speed_chk" type="checkbox" onchange="CheckForm('eco_max_speed', this);">Patch?</label></td>
+                <td><input id="eco_max_speed" type="number" step="1" min="0" max="100" value="22" disabled></td>
+            </tr>
+            <tr>
+                <td title="Minimum speed in km/h before the engine will start.">Motor start speed</td>
+                <td><label><input id="motor_start_speed_chk" type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label></td>
+                <td><input id="motor_start_speed" type="number" step="0.1" min="0" max="100" value="5.0" disabled></td>
+            </tr>
+            <tr>
+                <td title="Lower = More power.&#013 &#013Original = 51575&#013DYoC = 40165&#013CFW2.0Weak = 27877&#013CFW2.0 = 25787">Motor power constant</td>
+                <td><label><input id="motor_power_constant_chk" type="checkbox" onchange="CheckForm('motor_power_constant', this);">Patch?</label></td>
+                <td><input title="Lower = More power.&#013 &#013Original = 51575&#013DYoC = 40165&#013CFW2.0Weak = 27877&#013CFW2.0 = 25787" id="motor_power_constant" type="number" step="1" min="25787" max="65535" value="51575" disabled></td>
+            </tr>
+            <tr>
+                <td title="How many seconds it takes for cruise control to kick in.">Cruise control delay</td>
+                <td><label><input id="cruise_control_delay_chk" type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label></td>
+                <td><input id="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled></td>
+            </tr>
+            <tr>
+                <td title="Switch instantly between ECO and Normal mode while driving.">Instant mode switch</td>
+                <td colspan="2"><label><input type="checkbox" id="instant_eco_switch"></label></td>
+            </tr>
+            <tr>
+                <td title="The scooter will always start in ECO mode.">Boot with ECO mode</td>
+                <td colspan="2"><label><input type="checkbox" id="boot_with_eco"></label></td>
+            </tr>
+            <tr>
+                <td title="And I honestly don't know what it's for, maybe you can tell me?">Some patch that all custom firmwares have</td>
+                <td colspan="2"><label><input type="checkbox" id="idk_what_this_does"></label></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    Make sure to double check all of your entered values before submitting!<br>
+                    <b>I HAVE NOONE BUT MYSELF TO BLAME IF SOMETHING GOES WRONG:</b><br>
+                    <input type="submit" value="Patch!">
+                </td>
+            </tr>
+        </table>
     </form>
-
+    <hr>
     <p>
         Use the following app to flash your modified firmware: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2F&files=com.m365downgrade-v7_PATCHED.apk">com.m365downgrade-v7_PATCHED.apk</a>
         <br>
@@ -145,22 +122,25 @@
 
     <script type="text/javascript">
         function CheckForm(name, cb) {
-            document.getElementsByName(name)[0].disabled = !cb.checked;
+            document.getElementById(name).disabled = !cb.checked;            
         }
-
         function ChangeForm(name, value, patch) {
-            var o = document.getElementsByName(name)[0];
+            var mod = document.getElementById(name);
+            mod.value = value;
 
-            if(o.type == "checkbox") {
-                o.checked = value;
-            } else {
-                o.value = value;
+            if (patch === true && value !== null) {
+                document.getElementById(name+'_chk').checked = true;
+                mod.disabled = false;
+            } 
+            if (patch === false && value !== null) {
+                document.getElementById(name+'_chk').checked = false;
+                mod.disabled = true;
             }
-
-            if(patch !== undefined) {
-                var cb = o.nextElementSibling.children[0];
-                cb.checked = patch;
-                cb.onchange();
+            if (patch === true && value === null) {
+                mod.checked = true;
+            } 
+            if (patch === false && value === null) {
+                mod.checked = false;
             }
         }
 
@@ -171,9 +151,9 @@
             ChangeForm("motor_start_speed", "5.0", false);
             ChangeForm("motor_power_constant", "51575", false);
             ChangeForm("cruise_control_delay", "5", false);
-            ChangeForm("instant_eco_switch", false);
-            ChangeForm("boot_with_eco", false);
-            ChangeForm("idk_what_this_does", false);
+            ChangeForm("instant_eco_switch", null, false);
+            ChangeForm("boot_with_eco", null, false);
+            ChangeForm("idk_what_this_does", null, false);
         }
 
         function Preset_Mine() {
@@ -183,9 +163,9 @@
             ChangeForm("motor_start_speed", "3.0", true);
             ChangeForm("motor_power_constant", "40165", true);
             ChangeForm("cruise_control_delay", "5", false);
-            ChangeForm("instant_eco_switch", true);
-            ChangeForm("boot_with_eco", false);
-            ChangeForm("idk_what_this_does", true);
+            ChangeForm("instant_eco_switch", null, true);
+            ChangeForm("boot_with_eco", null, false);
+            ChangeForm("idk_what_this_does", null, true);
         }
 
         function Preset_DYoC() {
@@ -195,9 +175,9 @@
             ChangeForm("motor_start_speed", "2.0", true);
             ChangeForm("motor_power_constant", "40165", true);
             ChangeForm("cruise_control_delay", "5", false);
-            ChangeForm("instant_eco_switch", false);
-            ChangeForm("boot_with_eco", false);
-            ChangeForm("idk_what_this_does", true);
+            ChangeForm("instant_eco_switch", null, false);
+            ChangeForm("boot_with_eco", null, false);
+            ChangeForm("idk_what_this_does", null, true);
         }
 
         function Preset_CFWW() {
@@ -207,9 +187,9 @@
             ChangeForm("motor_start_speed", "1.45", true);
             ChangeForm("motor_power_constant", "27877", true);
             ChangeForm("cruise_control_delay", "5", false);
-            ChangeForm("instant_eco_switch", false);
-            ChangeForm("boot_with_eco", false);
-            ChangeForm("idk_what_this_does", true);
+            ChangeForm("instant_eco_switch", null, false);
+            ChangeForm("boot_with_eco", null, false);
+            ChangeForm("idk_what_this_does", null, true);
         }
     </script>
 

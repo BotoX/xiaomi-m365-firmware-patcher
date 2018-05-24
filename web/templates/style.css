@@ -8,5 +8,25 @@ h1 {
     border-radius: 10px;
     box-shadow: 0 0 10px grey;
     padding: 10px;
-    margin: 0 200px 0 200px;
+    margin: 0 20% 0 20%;
+}
+
+table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid black;
+    width: 33%;
+}
+
+th {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
