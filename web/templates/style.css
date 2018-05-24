@@ -43,9 +43,9 @@ tr {
 
 td {
     text-align: left;
-    padding-top: 15px;
+    padding-top: 20px;
     padding-bottom: 15px;
-    padding-left: 5px;
+    padding-left: 15px;
     width: 33%;
 }
 td:nth-child(2) {
