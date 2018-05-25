@@ -26,12 +26,12 @@
 
     <noscript>Этому сайту (несмотря на внешний вид) нужно несколько очень простых JavaScript-скриптов, которые включены в html-код.</noscript>
 
-    <p style="display: flex; justify-content: center;">
+    <p style="display: flex; justify-content: center; align-items: center;">
     Пресеты: 
-        <button onclick="Preset_Default();">По-умолчанию</button>
-        <button onclick="Preset_Mine();">Авторская</button>
-        <button onclick="Preset_DYoC();">DYoC</button>
-        <button onclick="Preset_CFWW();">CFW W</button>
+        <button class="button" onclick="Preset_Default();">По-умолчанию</button>
+        <button class="button" onclick="Preset_Mine();">Авторская</button>
+        <button class="button" onclick="Preset_DYoC();">DYoC</button>
+        <button class="button" onclick="Preset_CFWW();">CFW W</button>
     </p>
 
     <form action="/cfw">
@@ -93,7 +93,7 @@
                 <td colspan="3" style="text-align: center">
                     Дважды проверьте все введенные значения перед отправкой!<br>
                     <span style="color: red; font-size: 125%;"><b>МНЕ НЕКОГО ВИНИТЬ КРОМЕ СЕБЯ ЕСЛИ ЧТО-ТО ПОЙДЕТ НЕ ТАК:</b></span><br>
-                    <input type="submit" value="СКАЧАТЬ">
+                    <input class="button" type="submit" value="Загрузить!" style="margin-left: -5px; margin-top: 10px;">
                 </td>
             </tr>
         </table>

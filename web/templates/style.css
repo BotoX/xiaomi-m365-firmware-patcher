@@ -99,3 +99,21 @@ input:checked + label:after {
 label:active:after {
 	width: 30px;
 }
+
+.button {
+    border-radius: 50px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px;
+    background-color: grey;
+    border: 0px solid darkgrey;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.button:hover {
+    background: limegreen;
+    text-decoration: none;
+}

@@ -27,12 +27,12 @@
 
         <noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
 
-        <p style="display: flex; justify-content: center;">
+        <p style="display: flex; justify-content: center; align-items: center;">
         Presets:
-            <button onclick="Preset_Default();">Default</button>
-            <button onclick="Preset_Mine();">Mine</button>
-            <button onclick="Preset_DYoC();">DYoC</button>
-            <button onclick="Preset_CFWW();">CFW W</button>
+            <button class="button" onclick="Preset_Default();">Default</button>
+            <button class="button" onclick="Preset_Mine();">Mine</button>
+            <button class="button" onclick="Preset_DYoC();">DYoC</button>
+            <button class="button" onclick="Preset_CFWW();">CFW W</button>
         </p>
     </div>
 
@@ -92,10 +92,10 @@
                 <td colspan="2"><input type="checkbox" id="idk_what_this_does"><label for="idk_what_this_does"></td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align: center">
+                <td colspan="3" style="text-align: center;">
                     Make sure to double check all of your entered values before submitting!<br>
                     <b>I HAVE NOONE BUT MYSELF TO BLAME IF SOMETHING GOES WRONG:</b><br>
-                    <input type="submit" value="Patch!">
+                    <input class="button" type="submit" value="Patch!" style="margin-left: -5px; margin-top: 10px;">
                 </td>
             </tr>
         </table>
