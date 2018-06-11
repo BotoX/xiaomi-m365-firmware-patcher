@@ -71,9 +71,11 @@ def patch_firmware():
     if boot_with_eco:
         patcher.boot_with_eco()
 
-    idk_what_this_does = flask.request.args.get('idk_what_this_does', None)
-    if idk_what_this_does:
-        patcher.idk_what_this_does()
+    voltage_limit = flask.request.args.get('voltage_limit', None)
+    if voltage_limit is not None:
+        voltage_limit = float(voltage_limit)
+        assert voltage_limit >= 43.01 and voltage_limit <= 63.00
+        patcher.voltage_limit(voltage_limit)
 
     resp = flask.Response(patcher.data)
     resp.headers['Content-Type'] = 'application/octet-stream'

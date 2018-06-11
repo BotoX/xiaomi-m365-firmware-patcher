@@ -88,11 +88,10 @@ class FirmwarePatcher():
         pre, post = PatchImm(self.data, ofs, 2, val, MOVS_T1_IMM)
         return [(ofs, pre, post)]
 
-    # all CFWs have this patch and I don't know what it actually does
-    def idk_what_this_does(self):
+    def voltage_limit(self, volts):
+        val = struct.pack('<H', int(volts * 100) - 2600)
         sig = [0x40, 0xF2, 0xA5, 0x61, 0xA0, 0xF6, 0x28, 0x20, 0x88, 0x42]
         ofs = FindPattern(self.data, sig)
-        val = struct.pack('<H', 0xA28)
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         return [(ofs, pre, post)]
 
@@ -363,7 +362,7 @@ if __name__ == "__main__":
     cfw.kers_min_speed(35)
     cfw.normal_max_speed(31)
     cfw.eco_max_speed(26)
-    cfw.idk_what_this_does()
+    cfw.voltage_limit(52)
     cfw.motor_start_speed(3)
     cfw.motor_power_constant(40165)
     cfw.instant_eco_switch()
