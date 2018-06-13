@@ -80,16 +80,17 @@
                 <td><input id="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled></td>
             </tr>
             <tr>
+                <td title="If you want to connect a custom battery with a higher voltage.">Battery voltage limit</td>
+                <td><input id="voltage_limit_chk" type="checkbox" onchange="CheckForm('voltage_limit', this);"><label for="voltage_limit_chk"></label></td>
+                <td><input id="voltage_limit" type="number" step="0.01" min="43.01" max="63.00" value="43.01" disabled></td>
+            </tr>
+            <tr>
                 <td title="Switch instantly between ECO and Normal mode while driving.">Instant mode switch</td>
                 <td colspan="2"><input type="checkbox" id="instant_eco_switch"><label for="instant_eco_switch"></label></td>
             </tr>
             <tr>
                 <td title="The scooter will always start in ECO mode.">Boot with ECO mode</td>
                 <td colspan="2"><input type="checkbox" id="boot_with_eco"><label for="boot_with_eco"></td>
-            </tr>
-            <tr>
-                <td title="And I honestly don't know what it's for, maybe you can tell me?">Some patch that all custom firmwares have</td>
-                <td colspan="2"><input type="checkbox" id="idk_what_this_does"><label for="idk_what_this_does"></td>
             </tr>
             <tr>
                 <td colspan="3" style="text-align: center;">
@@ -151,7 +152,7 @@
             ChangeForm("cruise_control_delay", "5", false);
             ChangeForm("instant_eco_switch", null, false);
             ChangeForm("boot_with_eco", null, false);
-            ChangeForm("idk_what_this_does", null, false);
+            ChangeForm("voltage_limit", "43.01", false);
         }
 
         function Preset_Mine() {
@@ -163,7 +164,7 @@
             ChangeForm("cruise_control_delay", "5", false);
             ChangeForm("instant_eco_switch", null, true);
             ChangeForm("boot_with_eco", null, false);
-            ChangeForm("idk_what_this_does", null, true);
+            ChangeForm("voltage_limit", "52.00", true);
         }
 
         function Preset_DYoC() {
@@ -175,7 +176,7 @@
             ChangeForm("cruise_control_delay", "5", false);
             ChangeForm("instant_eco_switch", null, false);
             ChangeForm("boot_with_eco", null, false);
-            ChangeForm("idk_what_this_does", null, true);
+            ChangeForm("voltage_limit", "52.00", true);
         }
 
         function Preset_CFWW() {
@@ -187,7 +188,7 @@
             ChangeForm("cruise_control_delay", "5", false);
             ChangeForm("instant_eco_switch", null, false);
             ChangeForm("boot_with_eco", null, false);
-            ChangeForm("idk_what_this_does", null, true);
+            ChangeForm("voltage_limit", "52.00", true);
         }
     </script>
 
