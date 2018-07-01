@@ -201,9 +201,8 @@ class FirmwarePatcher():
         self.data[ofs:ofs+4] = post
         return [(ofs, pre, post)]
 
-
     def russian_throttle(self):
-        ret = dict()
+        ret = [dict()]
         # Find address of eco mode, part 1 find base addr
         sig = [0x91, 0x42, 0x01, 0xD2, 0x08, 0x46, 0x00, 0xE0, 0x10, 0x46, 0xA6, 0x4D]
         ofs = FindPattern(self.data, sig)
@@ -212,7 +211,7 @@ class FirmwarePatcher():
         ofsa = ofs + imm * 4 + 4 # ZeroExtend '00' + align?
         eco_addr = struct.unpack('<L', self.data[ofsa:ofsa + 4])[0]
 
-        ret['eco_base'] = {'ofs': ofs, 'imm': imm, 'ofsa': ofsa, 'addr': hex(eco_addr)}
+        ret[0]['eco_base'] = {'ofs': ofs, 'imm': imm, 'ofsa': ofsa, 'addr': hex(eco_addr)}
 
         # part 2, find offset of base addr
         sig = [0x85, 0xF8, 0x34, 0x60] # STRB.W  R6, [R5, #imm12]
@@ -221,8 +220,7 @@ class FirmwarePatcher():
         imm = struct.unpack('<HH', self.data[ofs:ofs + 4])[1] & 0x0FFF
         eco_addr += imm
 
-        ret['eco_addr'] = {'ofs': ofs, 'imm': imm, 'addr': hex(eco_addr)}
-
+        ret[0]['eco_addr'] = {'ofs': ofs, 'imm': imm, 'addr': hex(eco_addr)}
 
         sig = [0xF0, 0xB5, 0x25, 0x4A, 0x00, 0x24, 0xA2, 0xF8, 0xEC, 0x40, 0x24, 0x49, 0x4B, 0x79, 0x00, 0x2B,
                0x3E, 0xD1, 0x23, 0x4D, 0x2F, 0x68, 0x23, 0x4E, 0x23, 0x4B, 0x00, 0x2F, 0x39, 0xDB, None, 0x64,
@@ -253,7 +251,7 @@ class FirmwarePatcher():
         addr4_ofs1 = (struct.unpack('<H', self.data[ofs + 34:ofs + 34 + 2])[0] >> 6) & 0x1F
         addr4_ofs1 *= 2 # ZeroExtend '0'
 
-        ret['addrs'] = {
+        ret[0]['addrs'] = {
                         '1': [hex(addr1), hex(addr1 + addr1_ofs1)],
                         '2': [hex(addr2), hex(addr2 + addr2_ofs1), hex(addr2 + addr2_ofs2)],
                         '3': [hex(addr3)],
@@ -336,11 +334,19 @@ class FirmwarePatcher():
         # pad with zero for no apparent reason
         padded = bytes(res[0]).ljust(len(sig), b'\x00')
 
-        ret['len_sig'] = len(sig)
-        ret['len_res'] = len(res[0])
-        ret['res_inst'] = res[1]
+        ret[0]['len_sig'] = len(sig)
+        ret[0]['len_res'] = len(res[0])
+        ret[0]['res_inst'] = res[1]
 
         self.data[ofs:ofs+len(padded)] = bytes(padded)
+
+        # additional russian change
+        sig = [0x07, 0xD0, 0x0B, 0xE0, 0x00, 0xEB, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0]
+        ofs = FindPattern(self.data, sig) + 8
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('NOP')[0])
+        self.data[ofs:ofs+2] = post
+        ret.append((ofs, pre, post))
 
         return ret
 
@@ -359,16 +365,17 @@ if __name__ == "__main__":
 
     cfw = FirmwarePatcher(data)
 
-    cfw.kers_min_speed(35)
-    cfw.normal_max_speed(31)
-    cfw.eco_max_speed(26)
-    cfw.voltage_limit(52)
-    cfw.motor_start_speed(3)
-    cfw.motor_power_constant(40165)
-    cfw.instant_eco_switch()
-    cfw.boot_with_eco()
-    cfw.cruise_control_delay(5)
-    #cfw.russian_throttle()
+#    cfw.kers_min_speed(35)
+#    cfw.normal_max_speed(31)
+#    cfw.eco_max_speed(26)
+#    cfw.voltage_limit(52)
+#    cfw.motor_start_speed(3)
+#    cfw.motor_power_constant(40165)
+#    cfw.instant_eco_switch()
+#    cfw.boot_with_eco()
+#    cfw.cruise_control_delay(5)
+    print(cfw.russian_throttle())
+
 
     with open(sys.argv[2], 'wb') as fp:
         fp.write(cfw.data)

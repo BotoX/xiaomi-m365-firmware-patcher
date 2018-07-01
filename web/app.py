@@ -77,6 +77,10 @@ def patch_firmware():
         assert voltage_limit >= 43.01 and voltage_limit <= 63.00
         patcher.voltage_limit(voltage_limit)
 
+    russian_throttle = flask.request.args.get('russian_throttle', None)
+    if russian_throttle:
+        patcher.russian_throttle()
+
     resp = flask.Response(patcher.data)
     resp.headers['Content-Type'] = 'application/octet-stream'
     resp.headers['Content-Disposition'] = 'inline; filename="{0}-patched.bin"'.format(
