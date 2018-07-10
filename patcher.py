@@ -201,6 +201,14 @@ class FirmwarePatcher():
         self.data[ofs:ofs+4] = post
         return [(ofs, pre, post)]
 
+    def remove_hard_speed_limit(self):
+        sig = [0x08, 0x60, 0x08, 0x68, 0x42, 0xF6, 0xE0, 0x62, 0x90, 0x42, None, 0xDC, 0x08, 0x68, 0xD0, 0x42]
+        ofs = FindPattern(self.data, sig) + 8
+        pre = self.data[ofs:ofs+10]
+        post = bytes(self.ks.asm('NOP;'*5)[0])
+        self.data[ofs:ofs+10] = post
+        return [(ofs, pre, post)]
+
     def russian_throttle(self):
         ret = [dict()]
         # Find address of eco mode, part 1 find base addr
@@ -365,17 +373,17 @@ if __name__ == "__main__":
 
     cfw = FirmwarePatcher(data)
 
-#    cfw.kers_min_speed(35)
-#    cfw.normal_max_speed(31)
-#    cfw.eco_max_speed(26)
-#    cfw.voltage_limit(52)
-#    cfw.motor_start_speed(3)
-#    cfw.motor_power_constant(40165)
-#    cfw.instant_eco_switch()
-#    cfw.boot_with_eco()
-#    cfw.cruise_control_delay(5)
-    print(cfw.russian_throttle())
-
+    cfw.kers_min_speed(45)
+    cfw.normal_max_speed(35)
+    cfw.eco_max_speed(26)
+    cfw.voltage_limit(52)
+    cfw.motor_start_speed(3)
+    cfw.motor_power_constant(40165)
+    cfw.instant_eco_switch()
+    #cfw.boot_with_eco()
+    cfw.remove_hard_speed_limit()
+    #cfw.cruise_control_delay(5)
+    #cfw.russian_throttle()
 
     with open(sys.argv[2], 'wb') as fp:
         fp.write(cfw.data)

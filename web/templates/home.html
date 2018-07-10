@@ -118,6 +118,13 @@
         If you want to connect a custom battery with a higher voltage.
     </p></li>
 
+    <li><p>
+        Remove hard speed limit of 35km/h:
+        <label><input type="checkbox" name="remove_hard_speed_limit"></label>
+        <br>
+        Removes code which checks that the speed is below 34.78km/h (12000/345).
+    </p></li>
+
 </ul>
 <hr>
 
@@ -129,7 +136,7 @@
 </form>
 
 <p>
-    Use the following app to flash your modified firmware: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2F&files=com.m365downgrade-v7_PATCHED.apk">com.m365downgrade-v7_PATCHED.apk</a>
+    <b>Use the following app to flash your modified firmware: <a href="https://cloud.botox.bz/s/PZkfxWjNpgXibT5/download?path=%2F&files=com.m365downgrade-v7_PATCHED.apk">com.m365downgrade-v7_PATCHED.apk</a></b>
     <br>
     It is a patched version of the <a href="https://play.google.com/store/apps/details?id=com.m365downgrade">M365 DownG</a> app made by <a href="https://github.com/CamiAlfa">CamiAlfa</a>.
 </p>
@@ -177,6 +184,7 @@
         ChangeForm("boot_with_eco", false);
         ChangeForm("russian_throttle", false);
         ChangeForm("voltage_limit", "43.01", false);
+        ChangeForm("remove_hard_speed_limit", false);
     }
 
     function Preset_Mine() {
@@ -190,6 +198,7 @@
         ChangeForm("boot_with_eco", false);
         ChangeForm("russian_throttle", false);
         ChangeForm("voltage_limit", "52.00", true);
+        ChangeForm("remove_hard_speed_limit", true);
     }
 
     function Preset_DYoC() {
@@ -203,6 +212,7 @@
         ChangeForm("boot_with_eco", false);
         ChangeForm("russian_throttle", false);
         ChangeForm("voltage_limit", "52.00", true);
+        ChangeForm("remove_hard_speed_limit", false);
     }
 
     function Preset_CFWW() {
@@ -216,6 +226,7 @@
         ChangeForm("boot_with_eco", false);
         ChangeForm("russian_throttle", true);
         ChangeForm("voltage_limit", "52.00", true);
+        ChangeForm("remove_hard_speed_limit", false);
     }
 </script>
 

@@ -81,6 +81,10 @@ def patch_firmware():
     if russian_throttle:
         patcher.russian_throttle()
 
+    remove_hard_speed_limit = flask.request.args.get('remove_hard_speed_limit', None)
+    if remove_hard_speed_limit:
+        patcher.remove_hard_speed_limit()
+
     resp = flask.Response(patcher.data)
     resp.headers['Content-Type'] = 'application/octet-stream'
     resp.headers['Content-Disposition'] = 'inline; filename="{0}-patched.bin"'.format(
