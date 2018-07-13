@@ -1,0 +1,20 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	font-family: Verdana;
+}
+.header {
+	background-color: #f1f1f1;
+	padding: 15px;
+}
+.header > h1 {
+	margin-bottom: 0.1em
+}
+.main {
+	background-color: #f1f1f1;
+	text-align: left;
+	padding: 10px;
+	margin-top: 7px;
+	font-size: 12px;
+}

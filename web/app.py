@@ -1,6 +1,7 @@
 import flask
 import traceback
 import sys
+import os
 sys.path.append('..')
 from patcher import FirmwarePatcher
 
@@ -12,11 +13,24 @@ def handle_bad_request(e):
     return 'Exception occured:\n{}'.format(traceback.format_exc()), \
             400, {'Content-Type': 'text/plain'}
 
+# http://flask.pocoo.org/snippets/40/
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return flask.url_for(endpoint, **values)
+
 
 @app.route('/')
 def home():
     return flask.render_template('home.html')
-
 
 @app.route('/cfw')
 def patch_firmware():
@@ -85,6 +99,10 @@ def patch_firmware():
     if remove_hard_speed_limit:
         patcher.remove_hard_speed_limit()
 
+    remove_charging_mode = flask.request.args.get('remove_charging_mode', None)
+    if remove_charging_mode:
+        patcher.remove_charging_mode()
+
     resp = flask.Response(patcher.data)
     resp.headers['Content-Type'] = 'application/octet-stream'
     resp.headers['Content-Disposition'] = 'inline; filename="{0}-patched.bin"'.format(
@@ -92,3 +110,6 @@ def patch_firmware():
     resp.headers['Content-Length'] = len(patcher.data)
 
     return resp
+
+if __name__ == '__main__':
+    app.run()

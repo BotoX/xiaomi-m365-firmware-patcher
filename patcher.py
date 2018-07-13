@@ -209,6 +209,14 @@ class FirmwarePatcher():
         self.data[ofs:ofs+10] = post
         return [(ofs, pre, post)]
 
+    def remove_charging_mode(self):
+        sig = [0x19, 0xE0, None, 0xF8, 0x12, 0x00, 0x20, 0xB1, 0x84, 0xF8, 0x3A, 0x50, 0xE0, 0x7B, 0x18, 0xB1, 0x07, 0xE0]
+        ofs = FindPattern(self.data, sig) + 6
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('NOP')[0])
+        self.data[ofs:ofs+2] = post
+        return [(ofs, pre, post)]
+
     def russian_throttle(self):
         ret = [dict()]
         # Find address of eco mode, part 1 find base addr
@@ -378,11 +386,12 @@ if __name__ == "__main__":
     cfw.eco_max_speed(26)
     cfw.voltage_limit(52)
     cfw.motor_start_speed(3)
-    cfw.motor_power_constant(40165)
+    cfw.motor_power_constant(40000)
     cfw.instant_eco_switch()
     #cfw.boot_with_eco()
-    cfw.remove_hard_speed_limit()
     #cfw.cruise_control_delay(5)
+    cfw.remove_hard_speed_limit()
+    #cfw.remove_charging_mode()
     #cfw.russian_throttle()
 
     with open(sys.argv[2], 'wb') as fp:
