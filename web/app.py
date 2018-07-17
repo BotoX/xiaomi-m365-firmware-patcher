@@ -112,4 +112,4 @@ def patch_firmware():
     return resp
 
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0')
