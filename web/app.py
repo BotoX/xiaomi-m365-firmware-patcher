@@ -2,6 +2,7 @@ import flask
 import traceback
 import sys
 import os
+import time
 sys.path.append('..')
 from patcher import FirmwarePatcher
 
@@ -35,11 +36,14 @@ def home():
 @app.route('/cfw')
 def patch_firmware():
     version = flask.request.args.get('version', None)
-    if version not in ['DRV130', 'DRV134', 'DRV138', 'DRV140']:
+    if version not in ['DRV130', 'DRV134', 'DRV138', 'DRV140', 'DRV141', 'DRV142', 'DRV143']:
         return 'Invalid firmware version.', 400
 
     with open('../bins/{}.bin'.format(version), 'rb') as fp:
         patcher = FirmwarePatcher(fp.read())
+
+    filename = version + '-' + str(int(time.time()))
+    iversion = int(version[3:])
 
     kers_min_speed = flask.request.args.get('kers_min_speed', None)
     if kers_min_speed is not None:
@@ -103,10 +107,17 @@ def patch_firmware():
     if remove_charging_mode:
         patcher.remove_charging_mode()
 
+    encrypt = flask.request.args.get('encrypt', None)
+    if encrypt:
+        assert iversion >= 140, 'Flashing encrypted 1.3.x firmware is not supported. Downgrade to 1.4.0 first.'
+        patcher.encrypt()
+        filename += '.encrypted'
+
+    filename += '.bin'
+
     resp = flask.Response(patcher.data)
     resp.headers['Content-Type'] = 'application/octet-stream'
-    resp.headers['Content-Disposition'] = 'inline; filename="{0}-patched.bin"'.format(
-        version)
+    resp.headers['Content-Disposition'] = 'inline; filename="{0}"'.format(filename)
     resp.headers['Content-Length'] = len(patcher.data)
 
     return resp
