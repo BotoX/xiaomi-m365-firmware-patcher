@@ -107,6 +107,10 @@ def patch_firmware():
     if remove_charging_mode:
         patcher.remove_charging_mode()
 
+    bms_uart_76800 = flask.request.args.get('bms_uart_76800', None)
+    if bms_uart_76800:
+        patcher.bms_uart_76800()
+
     encrypt = flask.request.args.get('encrypt', None)
     if encrypt:
         assert iversion >= 140, 'Flashing encrypted 1.3.x firmware is not supported. Downgrade to 1.4.0 first.'

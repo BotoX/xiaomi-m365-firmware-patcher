@@ -38,6 +38,8 @@ def PatchImm(data, ofs, size, imm, signature):
     data[ofs:ofs+size] = packed
     return (orig, packed)
 
+class SignatureException(Exception):
+    pass
 
 def FindPattern(data, signature, mask=None, start=None, maxit=None):
     sig_len = len(signature)
@@ -60,7 +62,7 @@ def FindPattern(data, signature, mask=None, start=None, maxit=None):
             if matches == sig_len:
                 return i
 
-    raise Exception('Pattern not found!')
+    raise SignatureException('Pattern not found!')
 
 
 class FirmwarePatcher():
@@ -221,6 +223,25 @@ class FirmwarePatcher():
         pre = self.data[ofs:ofs+2]
         post = bytes(self.ks.asm('NOP')[0])
         self.data[ofs:ofs+2] = post
+        return [(ofs, pre, post)]
+
+    def bms_uart_76800(self):
+        ofs = 0
+        while True:
+            sig = [0x00, 0x21, 0x4F, 0xF4, 0xE1, 0x30, 0x00, 0x90, 0xAD, 0xF8, 0x08, 0x10, 0x0C, 0x20, 0xAD, 0xF8, 0x04, 0x10, 0xAD, 0xF8, 0x0A, 0x00, 0xAD, 0xF8, 0x06, 0x10]
+            ofs = FindPattern(self.data, sig, None, ofs) + 2
+
+            # USART3 address
+            sig = [0x00, 0x48, 0x00, 0x40]
+            try:
+                FindPattern(self.data, sig, None, ofs, 0x100)
+                break
+            except SignatureException:
+                continue
+
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('MOV.W R0, #76800')[0])
+        self.data[ofs:ofs+4] = post
         return [(ofs, pre, post)]
 
     def russian_throttle(self):
@@ -400,6 +421,7 @@ if __name__ == "__main__":
     #cfw.cruise_control_delay(5)
     cfw.remove_hard_speed_limit()
     #cfw.remove_charging_mode()
+    #cfw.bms_uart_76800()
     #cfw.russian_throttle()
 
     # Don't flash encrypted firmware to scooter running firmware < 1.4.1
