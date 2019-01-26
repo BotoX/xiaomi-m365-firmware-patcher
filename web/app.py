@@ -3,6 +3,9 @@ import traceback
 import sys
 import os
 import time
+import io
+import zipfile
+import hashlib
 sys.path.append('..')
 from patcher import FirmwarePatcher
 
@@ -42,9 +45,6 @@ def patch_firmware():
     with open('../bins/{}.bin'.format(version), 'rb') as fp:
         patcher = FirmwarePatcher(fp.read())
 
-    filename = version + '-' + str(int(time.time()))
-    iversion = int(version[3:])
-
     kers_min_speed = flask.request.args.get('kers_min_speed', None)
     if kers_min_speed is not None:
         kers_min_speed = float(kers_min_speed)
@@ -72,7 +72,7 @@ def patch_firmware():
     motor_power_constant = flask.request.args.get('motor_power_constant', None)
     if motor_power_constant is not None:
         motor_power_constant = int(motor_power_constant)
-        assert motor_power_constant >= 25787 and motor_power_constant <= 65535
+        assert motor_power_constant >= 20000 and motor_power_constant <= 65535
         patcher.motor_power_constant(motor_power_constant)
 
     cruise_control_delay = flask.request.args.get('cruise_control_delay', None)
@@ -111,18 +111,34 @@ def patch_firmware():
     if bms_uart_76800:
         patcher.bms_uart_76800()
 
-    encrypt = flask.request.args.get('encrypt', None)
-    if encrypt:
-        assert iversion >= 140, 'Flashing encrypted 1.3.x firmware is not supported. Downgrade to 1.4.0 first.'
-        patcher.encrypt()
-        filename += '.encrypted'
+    # make zip file for firmware
+    zip_buffer = io.BytesIO()
+    zip_file = zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False)
 
-    filename += '.bin'
+    zip_file.writestr('FIRM.bin', patcher.data)
+    md5 = hashlib.md5()
+    md5.update(patcher.data)
 
-    resp = flask.Response(patcher.data)
-    resp.headers['Content-Type'] = 'application/octet-stream'
+    patcher.encrypt()
+    zip_file.writestr('FIRM.bin.enc', patcher.data)
+    md5e = hashlib.md5()
+    md5e.update(patcher.data)
+
+    info_txt = 'dev: M365;\nnam: {};\nenc: B;\ntyp: DRV;\nmd5: {};\nmd5e: {};\n'.format(
+        version, md5.hexdigest(), md5e.hexdigest())
+
+    zip_file.writestr('info.txt', info_txt.encode())
+    zip_file.comment = flask.request.url.encode()
+    zip_file.close()
+    zip_buffer.seek(0)
+    content = zip_buffer.getvalue()
+    zip_buffer.close()
+
+    resp = flask.Response(content)
+    filename = version + '-' + str(int(time.time())) + '.zip'
+    resp.headers['Content-Type'] = 'application/zip'
     resp.headers['Content-Disposition'] = 'inline; filename="{0}"'.format(filename)
-    resp.headers['Content-Length'] = len(patcher.data)
+    resp.headers['Content-Length'] = len(content)
 
     return resp
 
