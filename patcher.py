@@ -244,6 +244,14 @@ class FirmwarePatcher():
         self.data[ofs:ofs+4] = post
         return [(ofs, pre, post)]
 
+    def wheel_speed_const(self, val):
+        val = struct.pack('<H', int(val))
+        sig = [0xB4, 0xF9, 0x1E, 0x00, 0x40, 0xF2, 0x59, 0x11, 0x48, 0x43]
+        ofs = FindPattern(self.data, sig) + 4
+        pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
+        self.data[ofs:ofs+4] = post
+        return [(ofs, pre, post)]
+
     def russian_throttle(self):
         ret = [dict()]
         # Find address of eco mode, part 1 find base addr
@@ -423,6 +431,7 @@ if __name__ == "__main__":
     #cfw.remove_charging_mode()
     #cfw.bms_uart_76800()
     #cfw.russian_throttle()
+    #cfw.wheel_speed_const(315)
 
     # Don't flash encrypted firmware to scooter running firmware < 1.4.1
     #cfw.encrypt()

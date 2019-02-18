@@ -111,6 +111,12 @@ def patch_firmware():
     if bms_uart_76800:
         patcher.bms_uart_76800()
 
+    wheel_speed_const = flask.request.args.get('wheel_speed_const', None)
+    if wheel_speed_const:
+        wheel_speed_const = int(wheel_speed_const)
+        assert wheel_speed_const >= 200 and wheel_speed_const <= 500
+        patcher.wheel_speed_const(wheel_speed_const)
+
     # make zip file for firmware
     zip_buffer = io.BytesIO()
     zip_file = zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False)

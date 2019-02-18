@@ -155,6 +155,14 @@
         <br>
         Only if you use the <a href="https://github.com/BotoX/xiaomi-m365-compatible-bms" target="_blank">compatible open source BMS</a>!<br>
     </p></li>
+
+    <li><p>
+        Wheel speed multiplier:
+        <input name="wheel_speed_const" type="number" step="1" min="200" max="500" value="345" disabled>
+        <label><input type="checkbox" onchange="CheckForm('wheel_speed_const', this);">Patch?</label>
+        <br>
+        For 10" wheels use 315, don't change otherwise.
+    </p></li>
 </ul>
 <hr>
 
@@ -215,6 +223,7 @@
         ChangeForm("remove_hard_speed_limit", false);
         ChangeForm("remove_charging_mode", false);
         ChangeForm("bms_uart_76800", false);
+        ChangeForm("wheel_speed_const", 345, false);
     }
 
     function Preset_Mine() {
@@ -232,6 +241,7 @@
         ChangeForm("remove_hard_speed_limit", true);
         ChangeForm("remove_charging_mode", false);
         ChangeForm("bms_uart_76800", false);
+        ChangeForm("wheel_speed_const", 345, false);
     }
 
     function Preset_CFWW() {
@@ -249,6 +259,7 @@
         ChangeForm("remove_hard_speed_limit", false);
         ChangeForm("remove_charging_mode", false);
         ChangeForm("bms_uart_76800", false);
+        ChangeForm("wheel_speed_const", 345, false);
     }
 
     function Preset_Rollerplausch() {
@@ -266,6 +277,7 @@
         ChangeForm("remove_hard_speed_limit", true);
         ChangeForm("remove_charging_mode", true);
         ChangeForm("bms_uart_76800", false);
+        ChangeForm("wheel_speed_const", 345, false);
     }
 
     function Preset_DYoC() {
@@ -283,6 +295,7 @@
         ChangeForm("remove_hard_speed_limit", false);
         ChangeForm("remove_charging_mode", false);
         ChangeForm("bms_uart_76800", false);
+        ChangeForm("wheel_speed_const", 345, false);
     }
 </script>
 
