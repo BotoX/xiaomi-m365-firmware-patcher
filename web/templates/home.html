@@ -36,11 +36,6 @@
     <button onclick="Preset_DYoC();">DYoC</button>
 </p>
 
-<p>
-    Import:
-    <input type="file" accept=".json,application/json" onchange="Import(this);"/>
-</p>
-
 <noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
 
 <hr>
@@ -176,7 +171,6 @@
     Make sure to double check all of your entered values before submitting!<br>
     <b>I AM RESPONSIBLE FOR THE ENTERED VALUES:</b>
     <input type="submit" value="Patch!"/>
-    <button type="button" onclick="Export();">Export</button>
     <button type="button" onclick="Share();">Share</button>
     <span id="shareConfirmation"></span>
 </p>
@@ -216,6 +210,29 @@
     };
 
     var formValues = Object.values(forms);
+    var queryStrings = window.location.search.substring(1);
+    var queries = queryStrings.split('&');
+
+    for (var i = 0; i < queries.length; i++) {
+        var query = queries[i];
+        var tmp = query.split('=');
+        var found = false;
+
+        for (var j = 0; j < formValues.length; j++) {
+            if (formValues[j] === tmp[0]) {
+                found = true;
+                break;
+            }
+        }
+
+        if(found) {
+            if (tmp[1] === 'on') {
+                tmp[1] = true;
+            }
+
+            ChangeForm(tmp[0], tmp[1], true);
+        }
+    }
 
     function GetForm(name) {
         return document.getElementsByName(name)[0];
@@ -251,8 +268,11 @@
 
         if (typeof patch === 'boolean') {
             var cb = GetPatchCheckBox(name);
-            cb.checked = patch;
-            cb.onchange();
+
+            if (cb) {
+                cb.checked = patch;
+                cb.onchange();
+            }
         }
     }
 
@@ -346,75 +366,8 @@
         ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
     }
 
-    function Import(input) {
-        if (typeof window.FileReader !== 'function') {
-            alert("The file API isn't supported on this browser yet.");
-            return;
-        }
-
-        var file = input.files && input.files[0];
-
-        if (!file) {
-            alert("No file found.");
-            return;
-        }
-
-        var fileReader = new FileReader();
-
-        fileReader.onload = function() {
-            var data;
-
-            try {
-                data = JSON.parse(fileReader.result);
-            } catch (err) {
-                alert("Invalid JSON");
-                return;
-            }
-
-            for (var i = 0; i < formValues.length; i++) {
-                var form = formValues[i];
-
-                if (data[form]) {
-                    ChangeForm(form, data[form].value, data[form].patch);
-                } else {
-                    alert("Unknown form : " + form);
-                }
-            }
-        };
-
-        fileReader.readAsText(file);
-    }
-
-    function Export() {
-        var savedData = {};
-
-        for (var i = 0; i < formValues.length; i++) {
-            var form = formValues[i];
-
-            savedData[form] = {
-                value: GetFormValue(form)
-            };
-
-            var patchCheckbox = GetPatchCheckBox(form);
-
-            if (patchCheckbox) {
-                savedData[form].patch = patchCheckbox.checked;
-            }
-        }
-
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(savedData, null, 2)));
-        element.setAttribute('download', GetFormValue(forms.VERSION) + "-" + Math.round(Date.now() / 1000) + ".json");
-
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-        document.body.removeChild(element);
-    }
-
     function Share() {
-        var url = location.protocol + '//' + location.host + '/cfw';
+        var url = location.protocol + '//' + location.host;
         var firstParam = true;
 
         function getSeparator() {
