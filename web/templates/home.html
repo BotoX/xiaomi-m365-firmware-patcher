@@ -177,6 +177,8 @@
     <b>I AM RESPONSIBLE FOR THE ENTERED VALUES:</b>
     <input type="submit" value="Patch!"/>
     <button type="button" onclick="Export();">Export</button>
+    <button type="button" onclick="Share();">Share</button>
+    <span id="shareConfirmation"></span>
 </p>
 </form>
 
@@ -409,6 +411,52 @@
 
         element.click();
         document.body.removeChild(element);
+    }
+
+    function Share() {
+        var url = location.protocol + '//' + location.host + '/cfw';
+        var firstParam = true;
+
+        function getSeparator() {
+            if (firstParam) {
+                firstParam = false;
+                return '?';
+            }
+
+            return '&';
+        }
+
+        for (var i = 0; i < formValues.length; i++) {
+            var form = formValues[i];
+
+            var formValue = GetFormValue(form);
+            var patchCheckbox = GetPatchCheckBox(form);
+
+            if (patchCheckbox) {
+                if (patchCheckbox.checked) {
+                    url += getSeparator() + form + '=' + formValue;
+                }
+            } else if (typeof formValue === 'boolean') {
+                if (formValue) {
+                    url += getSeparator() + form + '=on';
+                }
+            } else {
+                url += getSeparator() + form + '=' + formValue;
+            }
+        }
+
+        var textArea = document.createElement("textarea");
+
+        textArea.value = url;
+        document.body.appendChild(textArea);
+
+        textArea.focus();
+        textArea.select();
+
+        document.execCommand('copy');
+        document.getElementById('shareConfirmation').innerText = 'Copied!';
+
+        document.body.removeChild(textArea);
     }
 </script>
 
