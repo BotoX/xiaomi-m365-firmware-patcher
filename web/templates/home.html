@@ -170,7 +170,9 @@
 <p>
     Make sure to double check all of your entered values before submitting!<br>
     <b>I AM RESPONSIBLE FOR THE ENTERED VALUES:</b>
-    <input type="submit" value="Patch!">
+    <input type="submit" value="Patch!"/>
+    <button type="button" onclick="Share();">Share</button>
+    <span id="shareConfirmation"></span>
 </p>
 </form>
 
@@ -188,115 +190,226 @@
 </p>
 </div>
 
-<script type="text/javascript">
+<script>
+    var forms = {
+        "VERSION": "version",
+        "KERS_MIN_SPEED": "kers_min_speed",
+        "NORMAL_MAX_SPEED": "normal_max_speed",
+        "ECO_MAX_SPEED": "eco_max_speed",
+        "MOTOR_START_SPEED": "motor_start_speed",
+        "MOTOR_POWER_CONSTANT": "motor_power_constant",
+        "CRUISE_CONTROL_DELAY": "cruise_control_delay",
+        "INSTANT_ECO_SWITCH": "instant_eco_switch",
+        "BOOT_WITH_ECO": "boot_with_eco",
+        "RUSSIAN_THROTTLE": "russian_throttle",
+        "VOLTAGE_LIMIT": "voltage_limit",
+        "REMOVE_HARD_SPEED_LIMIT": "remove_hard_speed_limit",
+        "REMOVE_CHARGING_MODE": "remove_charging_mode",
+        "BMS_UART_76800": "bms_uart_76800",
+        "WHEEL_SPEED_CONST": "wheel_speed_const"
+    };
+
+    var formValues = Object.values(forms);
+    var queryStrings = window.location.search.substring(1);
+    var queries = queryStrings.split('&');
+
+    for (var i = 0; i < queries.length; i++) {
+        var query = queries[i];
+        var tmp = query.split('=');
+        var found = false;
+
+        for (var j = 0; j < formValues.length; j++) {
+            if (formValues[j] === tmp[0]) {
+                found = true;
+                break;
+            }
+        }
+
+        if(found) {
+            if (tmp[1] === 'on') {
+                tmp[1] = true;
+            }
+
+            ChangeForm(tmp[0], tmp[1], true);
+        }
+    }
+
+    function GetForm(name) {
+        return document.getElementsByName(name)[0];
+    }
+
+    function GetFormValue(name) {
+        var o = GetForm(name);
+
+        if (o.type === "checkbox") {
+            return o.checked;
+        }
+
+        return o.value;
+    }
+
+    function GetPatchCheckBox(name) {
+        var form = GetForm(name);
+        return form.nextElementSibling && form.nextElementSibling.children[0];
+    }
+
     function CheckForm(name, cb) {
-        document.getElementsByName(name)[0].disabled = !cb.checked;
+        GetForm(name).disabled = !cb.checked;
     }
 
     function ChangeForm(name, value, patch) {
-        var o = document.getElementsByName(name)[0];
+        var o = GetForm(name);
 
-        if(o.type == "checkbox") {
+        if (o.type === "checkbox") {
             o.checked = value;
         } else {
             o.value = value;
         }
 
-        if(patch !== undefined) {
-            var cb = o.nextElementSibling.children[0];
-            cb.checked = patch;
-            cb.onchange();
+        if (typeof patch === 'boolean') {
+            var cb = GetPatchCheckBox(name);
+
+            if (cb) {
+                cb.checked = patch;
+                cb.onchange();
+            }
         }
     }
 
     function Preset_Default() {
-        ChangeForm("version", "DRV138");
-        ChangeForm("kers_min_speed", "6.0", false);
-        ChangeForm("normal_max_speed", "28", false);
-        ChangeForm("eco_max_speed", "22", false);
-        ChangeForm("motor_start_speed", "5.0", false);
-        ChangeForm("motor_power_constant", "51575", false);
-        ChangeForm("cruise_control_delay", "5", false);
-        ChangeForm("instant_eco_switch", false);
-        ChangeForm("boot_with_eco", false);
-        ChangeForm("russian_throttle", false);
-        ChangeForm("voltage_limit", "43.01", false);
-        ChangeForm("remove_hard_speed_limit", false);
-        ChangeForm("remove_charging_mode", false);
-        ChangeForm("bms_uart_76800", false);
-        ChangeForm("wheel_speed_const", 345, false);
+        ChangeForm(forms.VERSION, "DRV138");
+        ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
+        ChangeForm(forms.NORMAL_MAX_SPEED, "28", false);
+        ChangeForm(forms.ECO_MAX_SPEED, "22", false);
+        ChangeForm(forms.MOTOR_START_SPEED, "5.0", false);
+        ChangeForm(forms.MOTOR_POWER_CONSTANT, "51575", false);
+        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.INSTANT_ECO_SWITCH, false);
+        ChangeForm(forms.BOOT_WITH_ECO, false);
+        ChangeForm(forms.RUSSIAN_THROTTLE, false);
+        ChangeForm(forms.VOLTAGE_LIMIT, "43.01", false);
+        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
+        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+        ChangeForm(forms.BMS_UART_76800, false);
+        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
     }
 
     function Preset_Mine() {
-        ChangeForm("version", "DRV138");
-        ChangeForm("kers_min_speed", "40.0", true);
-        ChangeForm("normal_max_speed", "30", true);
-        ChangeForm("eco_max_speed", "26", true);
-        ChangeForm("motor_start_speed", "3.0", true);
-        ChangeForm("motor_power_constant", "38000", true);
-        ChangeForm("cruise_control_delay", "5", false);
-        ChangeForm("instant_eco_switch", true);
-        ChangeForm("boot_with_eco", false);
-        ChangeForm("russian_throttle", false);
-        ChangeForm("voltage_limit", "52.00", true);
-        ChangeForm("remove_hard_speed_limit", true);
-        ChangeForm("remove_charging_mode", false);
-        ChangeForm("bms_uart_76800", false);
-        ChangeForm("wheel_speed_const", 345, false);
+        ChangeForm(forms.VERSION, "DRV138");
+        ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
+        ChangeForm(forms.NORMAL_MAX_SPEED, "30", true);
+        ChangeForm(forms.ECO_MAX_SPEED, "26", true);
+        ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
+        ChangeForm(forms.MOTOR_POWER_CONSTANT, "38000", true);
+        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.INSTANT_ECO_SWITCH, true);
+        ChangeForm(forms.BOOT_WITH_ECO, false);
+        ChangeForm(forms.RUSSIAN_THROTTLE, false);
+        ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
+        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, true);
+        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+        ChangeForm(forms.BMS_UART_76800, false);
+        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
     }
 
     function Preset_CFWW() {
-        ChangeForm("version", "DRV138");
-        ChangeForm("kers_min_speed", "46.3", true);
-        ChangeForm("normal_max_speed", "45", true);
-        ChangeForm("eco_max_speed", "27", true);
-        ChangeForm("motor_start_speed", "1.45", true);
-        ChangeForm("motor_power_constant", "27877", true);
-        ChangeForm("cruise_control_delay", "5", false);
-        ChangeForm("instant_eco_switch", false);
-        ChangeForm("boot_with_eco", false);
-        ChangeForm("russian_throttle", true);
-        ChangeForm("voltage_limit", "52.00", true);
-        ChangeForm("remove_hard_speed_limit", false);
-        ChangeForm("remove_charging_mode", false);
-        ChangeForm("bms_uart_76800", false);
-        ChangeForm("wheel_speed_const", 345, false);
+        ChangeForm(forms.VERSION, "DRV138");
+        ChangeForm(forms.KERS_MIN_SPEED, "46.3", true);
+        ChangeForm(forms.NORMAL_MAX_SPEED, "45", true);
+        ChangeForm(forms.ECO_MAX_SPEED, "27", true);
+        ChangeForm(forms.MOTOR_START_SPEED, "1.45", true);
+        ChangeForm(forms.MOTOR_POWER_CONSTANT, "27877", true);
+        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.INSTANT_ECO_SWITCH, false);
+        ChangeForm(forms.BOOT_WITH_ECO, false);
+        ChangeForm(forms.RUSSIAN_THROTTLE, true);
+        ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
+        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
+        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+        ChangeForm(forms.BMS_UART_76800, false);
+        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
     }
 
     function Preset_Rollerplausch() {
-        ChangeForm("version", "DRV138");
-        ChangeForm("kers_min_speed", "40.0", true);
-        ChangeForm("normal_max_speed", "30", true);
-        ChangeForm("eco_max_speed", "19", true);
-        ChangeForm("motor_start_speed", "3.0", true);
-        ChangeForm("motor_power_constant", "33000", true);
-        ChangeForm("cruise_control_delay", "5", false);
-        ChangeForm("instant_eco_switch", true);
-        ChangeForm("boot_with_eco", true);
-        ChangeForm("russian_throttle", false);
-        ChangeForm("voltage_limit", "43.01", false);
-        ChangeForm("remove_hard_speed_limit", true);
-        ChangeForm("remove_charging_mode", true);
-        ChangeForm("bms_uart_76800", false);
-        ChangeForm("wheel_speed_const", 345, false);
+        ChangeForm(forms.VERSION, "DRV138");
+        ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
+        ChangeForm(forms.NORMAL_MAX_SPEED, "30", true);
+        ChangeForm(forms.ECO_MAX_SPEED, "19", true);
+        ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
+        ChangeForm(forms.MOTOR_POWER_CONSTANT, "33000", true);
+        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.INSTANT_ECO_SWITCH, true);
+        ChangeForm(forms.BOOT_WITH_ECO, true);
+        ChangeForm(forms.RUSSIAN_THROTTLE, false);
+        ChangeForm(forms.VOLTAGE_LIMIT, "43.01", false);
+        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, true);
+        ChangeForm(forms.REMOVE_CHARGING_MODE, true);
+        ChangeForm(forms.BMS_UART_76800, false);
+        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
     }
 
     function Preset_DYoC() {
-        ChangeForm("version", "DRV138");
-        ChangeForm("kers_min_speed", "6.0", false);
-        ChangeForm("normal_max_speed", "31", true);
-        ChangeForm("eco_max_speed", "20", true);
-        ChangeForm("motor_start_speed", "2.0", true);
-        ChangeForm("motor_power_constant", "40165", true);
-        ChangeForm("cruise_control_delay", "5", false);
-        ChangeForm("instant_eco_switch", false);
-        ChangeForm("boot_with_eco", false);
-        ChangeForm("russian_throttle", false);
-        ChangeForm("voltage_limit", "52.00", true);
-        ChangeForm("remove_hard_speed_limit", false);
-        ChangeForm("remove_charging_mode", false);
-        ChangeForm("bms_uart_76800", false);
-        ChangeForm("wheel_speed_const", 345, false);
+        ChangeForm(forms.VERSION, "DRV138");
+        ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
+        ChangeForm(forms.NORMAL_MAX_SPEED, "31", true);
+        ChangeForm(forms.ECO_MAX_SPEED, "20", true);
+        ChangeForm(forms.MOTOR_START_SPEED, "2.0", true);
+        ChangeForm(forms.MOTOR_POWER_CONSTANT, "40165", true);
+        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.INSTANT_ECO_SWITCH, false);
+        ChangeForm(forms.BOOT_WITH_ECO, false);
+        ChangeForm(forms.RUSSIAN_THROTTLE, false);
+        ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
+        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
+        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+        ChangeForm(forms.BMS_UART_76800, false);
+        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
+    }
+
+    function Share() {
+        var url = location.protocol + '//' + location.host;
+        var firstParam = true;
+
+        function getSeparator() {
+            if (firstParam) {
+                firstParam = false;
+                return '?';
+            }
+
+            return '&';
+        }
+
+        for (var i = 0; i < formValues.length; i++) {
+            var form = formValues[i];
+
+            var formValue = GetFormValue(form);
+            var patchCheckbox = GetPatchCheckBox(form);
+
+            if (patchCheckbox) {
+                if (patchCheckbox.checked) {
+                    url += getSeparator() + form + '=' + formValue;
+                }
+            } else if (typeof formValue === 'boolean') {
+                if (formValue) {
+                    url += getSeparator() + form + '=on';
+                }
+            } else {
+                url += getSeparator() + form + '=' + formValue;
+            }
+        }
+
+        var textArea = document.createElement("textarea");
+
+        textArea.value = url;
+        document.body.appendChild(textArea);
+
+        textArea.focus();
+        textArea.select();
+
+        document.execCommand('copy');
+        document.getElementById('shareConfirmation').innerText = 'Copied!';
+
+        document.body.removeChild(textArea);
     }
 </script>
 
