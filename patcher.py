@@ -209,6 +209,14 @@ class FirmwarePatcher():
         self.data[ofs:ofs+4] = post
         return [(ofs, pre, post)]
 
+    def cruise_control_nobeep(self):
+        sig = [0xA8, 0xF8, None, 0x40, 0x88, 0xF8, 0x07, 0x60, 0x88, 0xF8, 0x10, 0x60, 0x28, 0x78, 0x88, 0xF8, 0x11, 0x00, 0x02, 0x20]
+        ofs = FindPattern(self.data, sig) + 22
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('NOP')[0])
+        self.data[ofs:ofs+2] = post
+        return [(ofs, pre, post)]
+
     def remove_hard_speed_limit(self):
         sig = [0x08, 0x60, 0x08, 0x68, 0x42, 0xF6, 0xE0, 0x62, 0x90, 0x42, None, 0xDC, 0x08, 0x68, 0xD0, 0x42]
         ofs = FindPattern(self.data, sig) + 8
@@ -427,6 +435,7 @@ if __name__ == "__main__":
     cfw.instant_eco_switch()
     #cfw.boot_with_eco()
     #cfw.cruise_control_delay(5)
+    #cfw.cruise_control_nobeep()
     cfw.remove_hard_speed_limit()
     #cfw.remove_charging_mode()
     #cfw.bms_uart_76800()

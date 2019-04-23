@@ -108,6 +108,13 @@
     </p></li>
 
     <li><p>
+        Cruise control no beep:
+        <label><input type="checkbox" name="cruise_control_nobeep"></label>
+        <br>
+        Disables beep sound when cruise control enables.
+    </p></li>
+
+    <li><p>
         Instant mode switch:
         <label><input type="checkbox" name="instant_eco_switch"></label>
         <br>
@@ -199,6 +206,7 @@
         "MOTOR_START_SPEED": "motor_start_speed",
         "MOTOR_POWER_CONSTANT": "motor_power_constant",
         "CRUISE_CONTROL_DELAY": "cruise_control_delay",
+        "CRUISE_CONTROL_NOBEEP": "cruise_control_nobeep",
         "INSTANT_ECO_SWITCH": "instant_eco_switch",
         "BOOT_WITH_ECO": "boot_with_eco",
         "RUSSIAN_THROTTLE": "russian_throttle",
@@ -284,6 +292,7 @@
         ChangeForm(forms.MOTOR_START_SPEED, "5.0", false);
         ChangeForm(forms.MOTOR_POWER_CONSTANT, "51575", false);
         ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
         ChangeForm(forms.INSTANT_ECO_SWITCH, false);
         ChangeForm(forms.BOOT_WITH_ECO, false);
         ChangeForm(forms.RUSSIAN_THROTTLE, false);
@@ -302,6 +311,7 @@
         ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
         ChangeForm(forms.MOTOR_POWER_CONSTANT, "38000", true);
         ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
         ChangeForm(forms.INSTANT_ECO_SWITCH, true);
         ChangeForm(forms.BOOT_WITH_ECO, false);
         ChangeForm(forms.RUSSIAN_THROTTLE, false);
@@ -320,6 +330,7 @@
         ChangeForm(forms.MOTOR_START_SPEED, "1.45", true);
         ChangeForm(forms.MOTOR_POWER_CONSTANT, "27877", true);
         ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
         ChangeForm(forms.INSTANT_ECO_SWITCH, false);
         ChangeForm(forms.BOOT_WITH_ECO, false);
         ChangeForm(forms.RUSSIAN_THROTTLE, true);
@@ -338,6 +349,7 @@
         ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
         ChangeForm(forms.MOTOR_POWER_CONSTANT, "33000", true);
         ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
         ChangeForm(forms.INSTANT_ECO_SWITCH, true);
         ChangeForm(forms.BOOT_WITH_ECO, true);
         ChangeForm(forms.RUSSIAN_THROTTLE, false);
@@ -356,6 +368,7 @@
         ChangeForm(forms.MOTOR_START_SPEED, "2.0", true);
         ChangeForm(forms.MOTOR_POWER_CONSTANT, "40165", true);
         ChangeForm(forms.CRUISE_CONTROL_DELAY, "5", false);
+        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
         ChangeForm(forms.INSTANT_ECO_SWITCH, false);
         ChangeForm(forms.BOOT_WITH_ECO, false);
         ChangeForm(forms.RUSSIAN_THROTTLE, false);
