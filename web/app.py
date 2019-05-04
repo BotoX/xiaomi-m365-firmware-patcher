@@ -51,29 +51,37 @@ def patch_firmware():
         assert kers_min_speed >= 0 and kers_min_speed <= 100
         patcher.kers_min_speed(kers_min_speed)
 
-    normal_max_speed = flask.request.args.get('normal_max_speed', None)
-    if normal_max_speed is not None:
-        normal_max_speed = int(normal_max_speed)
-        assert normal_max_speed >= 0 and normal_max_speed <= 100
-        patcher.normal_max_speed(normal_max_speed)
+    speed_params = flask.request.args.get('speed_params', None)
+    if speed_params:
+        speed_normal_kmh = int(flask.request.args.get('speed_normal_kmh', None))
+        assert speed_normal_kmh >= 0 and speed_normal_kmh <= 100
+        speed_normal_phase = int(flask.request.args.get('speed_normal_phase', None))
+        assert speed_normal_phase >= 0 and speed_normal_phase <= 65535
+        speed_normal_battery = int(flask.request.args.get('speed_normal_battery', None))
+        assert speed_normal_battery >= 0 and speed_normal_battery <= 65535
+        speed_eco_kmh = int(flask.request.args.get('speed_eco_kmh', None))
+        assert speed_eco_kmh >= 0 and speed_eco_kmh <= 100
+        speed_eco_phase = int(flask.request.args.get('speed_eco_phase', None))
+        assert speed_eco_phase >= 0 and speed_eco_phase <= 65535
+        speed_eco_battery = int(flask.request.args.get('speed_eco_battery', None))
+        assert speed_eco_battery >= 0 and speed_eco_battery <= 65535
+        patcher.speed_params(speed_normal_kmh, speed_normal_phase, speed_normal_battery, speed_eco_kmh, speed_eco_phase, speed_eco_battery)
 
-    eco_max_speed = flask.request.args.get('eco_max_speed', None)
-    if eco_max_speed is not None:
-        eco_max_speed = int(eco_max_speed)
-        assert eco_max_speed >= 0 and eco_max_speed <= 100
-        patcher.eco_max_speed(eco_max_speed)
+    brake_params = flask.request.args.get('brake_params', None)
+    if brake_params:
+        brake_limit = int(flask.request.args.get('brake_limit', None))
+        assert brake_limit >= 1 and brake_limit <= 130
+        brake_i_min = int(flask.request.args.get('brake_i_min', None))
+        assert brake_i_min >= 0 and brake_i_min <= 65535
+        brake_i_max = int(flask.request.args.get('brake_i_max', None))
+        assert brake_i_max >= brake_i_min and brake_i_max <= 65535
+        patcher.brake_params(brake_limit, brake_i_min, brake_i_max)
 
     motor_start_speed = flask.request.args.get('motor_start_speed', None)
     if motor_start_speed is not None:
         motor_start_speed = float(motor_start_speed)
         assert motor_start_speed >= 0 and motor_start_speed <= 100
         patcher.motor_start_speed(motor_start_speed)
-
-    motor_power_constant = flask.request.args.get('motor_power_constant', None)
-    if motor_power_constant is not None:
-        motor_power_constant = int(motor_power_constant)
-        assert motor_power_constant >= 20000 and motor_power_constant <= 65535
-        patcher.motor_power_constant(motor_power_constant)
 
     cruise_control_delay = flask.request.args.get('cruise_control_delay', None)
     if cruise_control_delay is not None:
@@ -96,7 +104,7 @@ def patch_firmware():
     voltage_limit = flask.request.args.get('voltage_limit', None)
     if voltage_limit is not None:
         voltage_limit = float(voltage_limit)
-        assert voltage_limit >= 43.01 and voltage_limit <= 63.00
+        assert voltage_limit >= 43.01 and voltage_limit <= 100.00
         patcher.voltage_limit(voltage_limit)
 
     russian_throttle = flask.request.args.get('russian_throttle', None)
@@ -110,6 +118,10 @@ def patch_firmware():
     remove_charging_mode = flask.request.args.get('remove_charging_mode', None)
     if remove_charging_mode:
         patcher.remove_charging_mode()
+
+    stay_on_locked = flask.request.args.get('stay_on_locked', None)
+    if stay_on_locked:
+        patcher.stay_on_locked()
 
     bms_uart_76800 = flask.request.args.get('bms_uart_76800', None)
     if bms_uart_76800:

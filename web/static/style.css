@@ -1,9 +1,6 @@
 * {
 	box-sizing: border-box;
 }
-body {
-	font-family: Verdana;
-}
 .header {
 	background-color: #f1f1f1;
 	padding: 15px;
@@ -16,7 +13,6 @@ body {
 	text-align: left;
 	padding: 10px;
 	margin-top: 7px;
-	font-size: 12px;
 }
 @media only screen and (max-width:500px) {
 	/* For mobile phones: */

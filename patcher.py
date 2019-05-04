@@ -45,7 +45,7 @@ def FindPattern(data, signature, mask=None, start=None, maxit=None):
     sig_len = len(signature)
     if start is None:
         start = 0
-    stop = len(data)
+    stop = len(data) - len(signature)
     if maxit is not None:
         stop = start + maxit
 
@@ -81,19 +81,111 @@ class FirmwarePatcher():
         pre, post = PatchImm(self.data, ofs, 4, val, MOVW_T3_IMM)
         return [(ofs, pre, post)]
 
-    def normal_max_speed(self, kmh):
-        val = struct.pack('<B', int(kmh))
-        sig = [0x04, 0xE0, 0x21, 0x85, 0x1C, 0x21, 0xE1, 0x83]
-        ofs = FindPattern(self.data, sig) + 4
-        pre, post = PatchImm(self.data, ofs, 2, val, MOVS_T1_IMM)
-        return [(ofs, pre, post)]
+    def speed_params(self, normal_kmh, normal_phase, normal_battery, eco_kmh, eco_phase, eco_battery):
+        ret = []
+        sig = [0x80, 0x28, 0x00, 0xDD, 0x80, 0x20, *[None]*2, 0x68, 0x43, 0x00, 0x0C]
+        ofs = FindPattern(self.data, sig) + 8
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('MOVW R2, #{:n}'.format(normal_battery))[0])
+        self.data[ofs:ofs+4] = post
+        ret.append([ofs, pre, post])
+        ofs += 4
 
-    def eco_max_speed(self, kmh):
-        val = struct.pack('<B', int(kmh))
-        sig = [0x00, 0xE0, 0x22, 0x85, 0x16, 0x22, 0xE2, 0x83]
-        ofs = FindPattern(self.data, sig) + 4
-        pre, post = PatchImm(self.data, ofs, 2, val, MOVS_T1_IMM)
-        return [(ofs, pre, post)]
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('B #0x2A')[0])
+        self.data[ofs:ofs+2] = post
+        ret.append([ofs, pre, post])
+        ofs += 2
+
+        sig = [0x01, 0x2A, 0x44, 0xF2, 0x68, 0x21, 0x42, 0x46, 0x05, 0xD0]
+        ofs = FindPattern(self.data, sig) + 2
+        pre, post = PatchImm(self.data, ofs, 4, struct.pack('<H', eco_phase), MOVW_T3_IMM)
+        ret.append([ofs, pre, post])
+        ofs += 4
+
+        ofs += 10
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('NOP')[0])
+        self.data[ofs:ofs+2] = post
+        ret.append([ofs, pre, post])
+        ofs += 2
+
+        ofs += 8
+        pre, post = PatchImm(self.data, ofs, 4, struct.pack('<H', eco_battery), MOVW_T3_IMM)
+        ret.append([ofs, pre, post])
+        ofs += 4
+
+        ofs += 2
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('B #0x06')[0])
+        self.data[ofs:ofs+2] = post
+        ret.append([ofs, pre, post])
+        ofs += 2
+
+        ofs += 6
+        pre, post = PatchImm(self.data, ofs, 2, struct.pack('<B', eco_kmh), MOVS_T1_IMM)
+        ret.append([ofs, pre, post])
+        ofs += 2
+
+        ofs += 6
+        pre, post = PatchImm(self.data, ofs, 2, struct.pack('<B', normal_kmh), MOVS_T1_IMM)
+        ret.append([ofs, pre, post])
+        ofs += 2
+
+        ofs += 2
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('MOVW R1, #{:n}'.format(normal_phase))[0])
+        self.data[ofs:ofs+4] = post
+        ret.append([ofs, pre, post])
+
+        return ret
+
+    # limit: 1 - 130, min: 0 - 65k, max: min - 65k
+    def brake_params(self, limit, min, max):
+        ret = []
+        limit = int(limit)
+        assert limit >= 1 and limit <= 130
+        min = int(min)
+        assert min >= 0 and min < 65536
+        max = int(max)
+        assert max >= min and max < 65536
+
+        sig = [0x73, 0x29, 0x00, 0xDD, 0x73, 0x21, 0x45, 0xF2, 0xF0, 0x53, 0x59, 0x43, 0x73, 0x23, 0x91, 0xFB, 0xF3, 0xF1, None, 0x6C, 0x51, 0x1A, 0xA1, 0xF5, 0xFA, 0x51]
+        ofs = FindPattern(self.data, sig)
+
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('CMP R1, #{:n}'.format(limit))[0])
+        self.data[ofs:ofs+2] = post
+        ret.append((ofs, pre, post))
+        ofs += 2
+
+        ofs += 2
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('MOVS R1, #{:n}'.format(limit))[0])
+        self.data[ofs:ofs+2] = post
+        ret.append((ofs, pre, post))
+        ofs += 2
+
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('MOVW R3, #{:n}'.format(max - min))[0])
+        self.data[ofs:ofs+4] = post
+        ret.append((ofs, pre, post))
+        ofs += 4
+
+        ofs += 2
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('MOVS R3, #{:n}'.format(limit))[0])
+        self.data[ofs:ofs+2] = post
+        ret.append((ofs, pre, post))
+        ofs += 2
+
+        ofs += 8
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('SUB.W R1, R1, #{:n}'.format(min & 0xFF00))[0])
+        self.data[ofs:ofs+4] = post
+        ret.append((ofs, pre, post))
+
+        return ret
 
     def voltage_limit(self, volts):
         val = struct.pack('<H', int(volts * 100) - 2600)
@@ -147,34 +239,30 @@ class FirmwarePatcher():
         ret = []
         sig = [0x2C, 0xF0, 0x02, 0x0C, 0x81, 0xF8, 0x00, 0xC0, 0x01, 0x2A, 0x0A, 0xD0]
         ofs = FindPattern(self.data, sig) + 8
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('NOP')[0])
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
         ofs += 2
 
-        pre, post = self.data[ofs:ofs+2], bytearray((0x0A, 0xE0))
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('B #0x18')[0])
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
+        ofs += 2
 
         sig = [0x4C, 0xF0, 0x02, 0x0C, 0x81, 0xF8, 0x00, 0xC0, 0x01, 0x2A, 0x06, 0xD1, 0x2B, 0xB9]
         ofs = FindPattern(self.data, sig, None, ofs, 100) + 8
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
-        self.data[ofs:ofs+2] = post
+        pre = self.data[ofs:ofs+6]
+        post = bytes(self.ks.asm('NOP;NOP;NOP')[0])
+        self.data[ofs:ofs+6] = post
         ret.append((ofs, pre, post))
-        ofs += 2
-
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
-        self.data[ofs:ofs+2] = post
-        ret.append((ofs, pre, post))
-        ofs += 2
-
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
-        self.data[ofs:ofs+2] = post
-        ret.append((ofs, pre, post))
+        ofs += 6
 
         sig = [0x85, 0xF8, 0x34, 0x60, 0x02, 0xE0, 0x0B, 0xB9]
         ofs = FindPattern(self.data, sig, None, ofs, 100) + 6
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
+        pre = self.data[ofs:ofs+2]
+        post = bytes(self.ks.asm('NOP')[0])
         self.data[ofs:ofs+2] = post
         ret.append((ofs, pre, post))
         return ret
@@ -183,18 +271,15 @@ class FirmwarePatcher():
         ret = []
         sig = [0xB4, 0xF8, 0xEA, 0x20, 0x01, 0x2A, 0x02, 0xD1, 0x00, 0xF8, 0x34, 0x1F, 0x01, 0x72]
         ofs = FindPattern(self.data, sig)
-        pre, post = self.data[ofs:ofs+4], bytearray((0xA4, 0xF8, 0xEA, 0x10))
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('STRH.W R1, [R4, #0xEA]')[0])
         self.data[ofs:ofs+4] = post
         ret.append((ofs, pre, post))
         ofs += 4
 
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
-        self.data[ofs:ofs+2] = post
-        ret.append((ofs, pre, post))
-        ofs += 2
-
-        pre, post = self.data[ofs:ofs+2], bytearray((0x00, 0xBF))
-        self.data[ofs:ofs+2] = post
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('NOP;NOP')[0])
+        self.data[ofs:ofs+4] = post
         ret.append((ofs, pre, post))
         return ret
 
@@ -231,6 +316,14 @@ class FirmwarePatcher():
         pre = self.data[ofs:ofs+2]
         post = bytes(self.ks.asm('NOP')[0])
         self.data[ofs:ofs+2] = post
+        return [(ofs, pre, post)]
+
+    def stay_on_locked(self):
+        sig = [None, 0x49, 0x40, 0x1C, *[None]*2, 0x88, 0x42, 0x03, 0xDB, *[None]*2, 0x08, 0xB9]
+        ofs = FindPattern(self.data, sig) + 14
+        pre = self.data[ofs:ofs+4]
+        post = bytes(self.ks.asm('NOP;NOP')[0])
+        self.data[ofs:ofs+4] = post
         return [(ofs, pre, post)]
 
     def bms_uart_76800(self):
@@ -427,17 +520,17 @@ if __name__ == "__main__":
     cfw = FirmwarePatcher(data)
 
     cfw.kers_min_speed(45)
-    cfw.normal_max_speed(35)
-    cfw.eco_max_speed(26)
+    cfw.speed_params(31, 50000, 30000, 26, 40000, 20000)
+    cfw.brake_params(115, 8000, 50000)
     cfw.voltage_limit(52)
     cfw.motor_start_speed(3)
-    cfw.motor_power_constant(40000)
     cfw.instant_eco_switch()
     #cfw.boot_with_eco()
     #cfw.cruise_control_delay(5)
     #cfw.cruise_control_nobeep()
     cfw.remove_hard_speed_limit()
     #cfw.remove_charging_mode()
+    #cfw.stay_on_locked()
     #cfw.bms_uart_76800()
     #cfw.russian_throttle()
     #cfw.wheel_speed_const(315)
