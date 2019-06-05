@@ -79,7 +79,11 @@
         <label>Eco max phase current: <input name="speed_eco_phase" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label><br>
         <label>Eco max battery current: <input name="speed_eco_battery" type="number" step="1" min="0" max="65535" value="7000" disabled>&nbsp;mA</label>
     </p>
-    <p>For Smoothness: Stock (10S) battery: Max 31 km/h, 12S battery: Max 36 km/h</p>
+    <p>
+        For Smoothness: Stock (10S) battery: Max 31 km/h, 12S battery: Max 36 km/h<br>
+        To convert the old power constant to mA, use (51575/constant)*17000<br>
+        Motor phases are PWM controlled and instantaneous current exceeds the average. As a rough guide, use 2.0-2.5x battery current.
+    </p>
     </li>
 
     <li>
