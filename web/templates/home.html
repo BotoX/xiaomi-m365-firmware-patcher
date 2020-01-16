@@ -8,41 +8,51 @@
 <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <title>Xiaomi Mijia M365 Custom Firmware Toolkit</title>
+<link rel="stylesheet" type="text/css" href="data/custom-css-bootstrap-magic-2020-01-15.css">
+<style>
+
+#block { 
+    border-width: 2px; 
+    border-color: #4682B4; 
+    background-color: #EEEEEE; 
+    text-align: left; 
+    overflow:hidden;
+	padding:6px;
+}
+img{
+   float:left;
+}
+
+</style>
 </head>
 
-<body>
+<body style="padding: 10px">
 
-<div class="header">
-    <h1>Xiaomi Mijia M365 Custom Firmware Toolkit</h1>
-    <a href="https://hackm365.com/">Spanish</a>
-    <a href="https://spzjulien.com/CFW/">French</a>
-    <a href="http://cfw.rollerplausch.com/">German</a>
-    <a href="http://xn--80adrjrfh9d.xn--80atlli8e.xn--p1ai/">Russian</a>
-</div>
-
-<div class="content">
-<p>
-    Configure your own custom firmware by adjusting the options below.<br>
-    There are safety checks in place to ensure your scooter will not be bricked.<br>
-    Be aware that a higher motor power will shorten the lifetime of your battery and could damage your motor.<br>
-    By default nothing will be patched, enable patches with the "Patch?" checkbox next to them.
+<h2>Xiaomi Mijia M365 Custom Firmware Toolkit</h2>
+<p>Configure your own custom firmware by adjusting the options below. There are safety checks in place to ensure your scooter will not be bricked.<br>
+Be aware that a higher motor power will shorten the lifetime of your battery and could damage your motor.
+By default nothing will be patched, enable patches with the "Patch?" checkbox next to them.
 </p>
 
-<p>
-    Presets:
-    <button onclick="Preset_Default();">Default</button>
-    <button onclick="Preset_BotoX();">BotoX</button>
-    <button onclick="Preset_Rollerplausch();">Rollerplausch.com</button>
-    <button onclick="Preset_DYoC();">DYoC</button>
-</p>
-
+<h4>Presets</h4>
+    <button class="btn btn-sm btn-secondary" onclick="Preset_Default();">Default</button>
+	<button class="btn btn-sm btn-primary" onclick="Preset_Spzjulien();">Spzjulien</button>
+    <button class="btn btn-sm btn-primary" onclick="Preset_BotoX();">BotoX</button>
+    <button class="btn btn-sm btn-primary" onclick="Preset_DYoC();">DYoC</button>
+	<button class="btn btn-sm btn-primary" onclick="Preset_CFWW();">CFW W</button>
+	<button class="btn btn-sm btn-primary" onclick="Preset_Rollerplausch();">RollerPlausch v8 FULLSPEED</button>
+	<button class="btn btn-sm btn-primary" onclick="Preset_Rollerplausch_heavy();">RollerPlausch v8 HEAVY</button>
+	<button class="btn btn-sm btn-primary" onclick="Preset_Rollerplausch_stvo();">RollerPlausch v8 STVO</button>
+	
 <noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
 
-<hr>
+<hr />
 <form action="/cfw">
-<ul>
-    <li>
-    <label><b>Base version of your firmware:</b>
+
+<div id="block">
+	<img style="background-position: top left; margin-right:15px; width: 4em" src="data/developer_board-24px.svg" />
+	<h5>Base version of your firmware</h5>
+    <label>
     <select name="version">
         <option value="DRV143">1.4.3</option>
         <option value="DRV142">1.4.2</option>
@@ -51,20 +61,61 @@
         <option value="DRV138" selected>1.3.8</option>
         <option value="DRV134">1.3.4</option>
         <option value="DRV130">1.3.0</option>
-    </select></label>
-    <p>1.3.8 is recommended over 1.4.0, it provides a much smoother riding experience.</p>
-    </li>
+    </select>
+	  <p>1.3.8 is recommended over 1.4.0, it provides a much smoother riding experience.</p>
+	</label>
+</div>
 
-    <li>
-    <label><b>Auto-KERS min speed:</b>
-    <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h</label>
+<div id="block">
+	<img style="background-position: top left; margin-right:15px; width: 4em" src="data/flip_camera_android-24px.svg" />
+	<h5>Auto-KERS min speed</h5>
+	<label>
+     <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h
     <label><input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
     <p>
         The scooter will start braking by itself when it goes above this speed and you're not accelerating.<br>
         If you want "KERS OFF" then just put this to 40&nbsp;km/h.
         You will still have recuperative braking when using the brake lever.<br>
     </p>
-    </li>
+	</label>
+</div>
+
+
+<div id="block">
+	<img style="background-position: top left; margin-right:15px; width: 4em" src="data/trending_up-24px.svg" />
+	<h5>Patch speed control params?</h5>
+	<label>
+     <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h
+    <label><input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
+    <p>
+        The scooter will start braking by itself when it goes above this speed and you're not accelerating.<br>
+        If you want "KERS OFF" then just put this to 40&nbsp;km/h.
+        You will still have recuperative braking when using the brake lever.<br>
+    </p>
+	</label>
+</div>
+
+
+
+<div id="block">
+	<img style="background-position: top left; margin-right:15px; width: 4em" src="data/pan_tool-24px.svg" />
+	<h5>Patch brake lever params?</h5>
+	<label>
+     <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h
+    <label><input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
+    <p>
+        The scooter will start braking by itself when it goes above this speed and you're not accelerating.<br>
+        If you want "KERS OFF" then just put this to 40&nbsp;km/h.
+        You will still have recuperative braking when using the brake lever.<br>
+    </p>
+	</label>
+</div>
+
+
+
+
+<ul>
+   
 
     <li>
     <label><b>Patch speed control params?</b>
@@ -333,6 +384,7 @@
     }
 
     function Preset_BotoX() {
+		Preset_Default();
         ChangeForm(forms.VERSION, "DRV138");
         ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
         ChangeForm(forms.SPEED_PARAMS, true);
@@ -361,6 +413,7 @@
     }
 
     function Preset_Rollerplausch() {
+		Preset_Default();
         ChangeForm(forms.VERSION, "DRV138");
         ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
         ChangeForm(forms.SPEED_PARAMS, true);
@@ -389,6 +442,7 @@
     }
 
     function Preset_DYoC() {
+		Preset_Default();
         ChangeForm(forms.VERSION, "DRV138");
         ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
         ChangeForm(forms.SPEED_PARAMS, false);
@@ -415,6 +469,83 @@
         ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
     }
 
+	function Preset_Spzjulien() {
+		Preset_Default();
+        ChangeForm("version", "DRV138");
+        ChangeForm("kers_min_speed", "40.0", true);
+        ChangeForm("normal_max_speed", "31", true);
+        ChangeForm("eco_max_speed", "21", true);
+        ChangeForm("motor_start_speed", "3.0", true);
+        ChangeForm("motor_power_constant", "45000", true);
+        ChangeForm("cruise_control_delay", "7", true);
+        ChangeForm("instant_eco_switch", true);
+        ChangeForm("boot_with_eco", false);
+        ChangeForm("russian_throttle", false);
+        ChangeForm("voltage_limit", "43.01", false);
+        ChangeForm("remove_hard_speed_limit", true);
+        ChangeForm("remove_charging_mode", false);
+        ChangeForm("bms_uart_76800", false);
+    }
+	
+	
+    function Preset_Rollerplausch() {
+		Preset_Default();
+        ChangeForm("version", "DRV138");
+        ChangeForm("kers_min_speed", "40.0", true);
+        ChangeForm("normal_max_speed", "30", true);
+        ChangeForm("eco_max_speed", "19", true);
+        ChangeForm("motor_start_speed", "3.0", true);
+        ChangeForm("motor_power_constant", "33000", true);
+        ChangeForm("cruise_control_delay", "5", false);
+        ChangeForm("cruise_control_nobeep", false);
+        ChangeForm("instant_eco_switch", false);
+        ChangeForm("boot_with_eco", true);
+        ChangeForm("russian_throttle", false);
+        ChangeForm("voltage_limit", "43.01", false);
+        ChangeForm("remove_hard_speed_limit", true);
+        ChangeForm("remove_charging_mode", true);
+        ChangeForm("bms_uart_76800", false);
+    }
+
+    function Preset_Rollerplausch_heavy() {
+		Preset_Default();
+        ChangeForm("version", "DRV138");
+        ChangeForm("kers_min_speed", "40.0", true);
+        ChangeForm("normal_max_speed", "30", true);
+        ChangeForm("eco_max_speed", "19", true);
+        ChangeForm("motor_start_speed", "5.0", true);
+        ChangeForm("motor_power_constant", "42979", true);
+        ChangeForm("cruise_control_delay", "5", false);
+        ChangeForm("cruise_control_nobeep", false);
+        ChangeForm("instant_eco_switch", false);
+        ChangeForm("boot_with_eco", true);
+        ChangeForm("russian_throttle", false);
+        ChangeForm("voltage_limit", "43.01", false);
+        ChangeForm("remove_hard_speed_limit", true);
+        ChangeForm("remove_charging_mode", true);
+        ChangeForm("bms_uart_76800", false);
+    }
+	
+	
+    function Preset_Rollerplausch_stvo() {
+		Preset_Default();
+        ChangeForm("version", "DRV138");
+        ChangeForm("kers_min_speed", "40.0", true);
+        ChangeForm("normal_max_speed", "25", true);
+        ChangeForm("eco_max_speed", "19", true);
+        ChangeForm("motor_start_speed", "3.0", true);
+        ChangeForm("motor_power_constant", "33000", true);
+        ChangeForm("cruise_control_delay", "5", false);
+        ChangeForm("cruise_control_nobeep", false);
+        ChangeForm("instant_eco_switch", false);
+        ChangeForm("boot_with_eco", true);
+        ChangeForm("russian_throttle", false);
+        ChangeForm("voltage_limit", "43.01", false);
+        ChangeForm("remove_hard_speed_limit", true);
+        ChangeForm("remove_charging_mode", true);
+        ChangeForm("bms_uart_76800", false);
+    }
+	
     function Share() {
         var url = location.protocol + '//' + location.host;
         var firstParam = true;
