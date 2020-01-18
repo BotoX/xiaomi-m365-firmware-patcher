@@ -16,7 +16,7 @@
             border-color: #4682B4;
             background-color: #EEEEEE;
             text-align: left;
-			margin-top:2px;
+            margin-top: 2px;
             overflow: hidden;
             padding: 6px;
         }
@@ -27,12 +27,18 @@
         
         .comment {
             font-style: italic;
+            width: 80em;
         }
-		
-		.paramblock {
-			float:left;
-		}
+        
+        .paramblock {
+            float: left;
+        }
+        
+        .patchbadge {
+            margin-top: -22px;
+        }
     </style>
+
 </head>
 
 <body style="padding: 10px">
@@ -89,7 +95,7 @@
                     <h5>Auto-KERS min speed</h5>
                     <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h</label>
                 <label>
-                    <input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
+                    <input type="checkbox" onchange="CheckForm('kers_min_speed', this);"> patch?</label>
                 <div class="comment">
                     The scooter will start braking by itself when it goes above this speed and you're not accelerating.
                     <br> If you want "KERS OFF" then just put this to 40&nbsp;km/h. You will still have recuperative braking when using the brake lever.
@@ -125,10 +131,20 @@
                     <label>Eco max battery current:
                         <input name="speed_eco_battery" type="number" step="1" min="0" max="65535" value="7000" disabled>&nbsp;mA</label>
                 </p>
-                <div class="comment">
-                    For smoothness with stock battery (10S 42V 8A), set max to 31 km/h. For 12S battery (50V 12A), set max to 36 km/h
-                    <br> To convert the old power constant to mA, use (51575/constant)*17000. Motor phases are PWM controlled and instantaneous current exceeds the average. As a rough guide, use 2.0-2.5x battery current.
+                <div class="comment" style="overflow: auto">
+                    <p>
+                        This setting was previously the "power constant" and it was split into several parameters. Rough guidelines: for normal mode, the max phase current is about 1.8x-2.0x the max battery current. For eco mode, the max phase is 2.0-2.5x the max battery current.
+                    </p>
+                    <p>
+                        The "power constant" corresponds (after conversion) to the "normal max battery current". To convert the old power constant to mA, use (51575/constant)*17000.
+                        <br/>Converted "old power constant": Original = 17000, DYoC = 22000, CFW2.0 Weak = 31200, CFW2.0 = 33700
+                    </p>
+                    Motor phases are PWM controlled and instantaneous current exceeds the average.
+
+                    <br/> For smoothness with stock battery (10S 42V 8A), set max to 31 km/h. For 12S battery (50V 12A), set max to 36 km/h
+
                 </div>
+
             </div>
         </div>
 
@@ -152,9 +168,6 @@
                         <input name="brake_i_max" type="number" step="1" min="8000" max="65535" value="30000" disabled>&nbsp;mA</label>
                 </p>
 
-                <div class="comment">
-                    Be careful with these settings as they may easily lead to injuries.
-                </div>
             </div>
         </div>
 
@@ -165,7 +178,7 @@
                     <h5>Motor start speed</h5>
                     <input name="motor_start_speed" type="number" step="0.01" min="0" max="100" value="5.0" disabled>&nbsp;km/h</label>
                 <label>
-                    <input type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
+                    <input type="checkbox" onchange="CheckForm('motor_start_speed', this);"> patch?</label>
                 <div class="comment">
                     Minimum speed in km/h before the engine will start. Recommended between 1 and 4, a low start speed will require more power.
                 </div>
@@ -175,10 +188,11 @@
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/forward_5-24px.svg" />
             <div class="paramblock">
-                <label><b>Cruise control delay</b>
+                <label>
+                    <h5>Cruise control delay</h5>
                     <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>&nbsp;seconds</label>
                 <label>
-                    <input type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label>
+                    <input type="checkbox" onchange="CheckForm('cruise_control_delay', this);"> patch?</label>
                 <br>
                 <div class="comment">
                     How many seconds it takes for cruise control to kick in and keep the same speed.
@@ -244,7 +258,7 @@
                     <h5>Battery voltage limit:</h5>
                     <input name="voltage_limit" type="number" step="0.01" min="43.01" max="100.00" value="43.01" disabled>&nbsp;Volt</label>
                 <label>
-                    <input type="checkbox" onchange="CheckForm('voltage_limit', this);">Patch?</label>
+                    <input type="checkbox" onchange="CheckForm('voltage_limit', this);"> patch?</label>
                 <div class="comment">
                     Change these settings if you want to connect a custom battery with a higher voltage (from stock 10S to 12S for example).
                 </div>
@@ -259,7 +273,7 @@
                     <input type="checkbox" name="remove_hard_speed_limit">
                 </label>
                 <div class="comment">
-                    Removes logic that checks that the speed is below 34.78km/h (12000/345).
+                    Removes logic that checks that the speed is below 34.78km/h (12000/345). Custom batteries delivering a higher voltage may require this patch to reach higher speed.
                 </div>
             </div>
         </div>
@@ -271,7 +285,6 @@
                     <h5>Remove charging mode</h5>
                     <input type="checkbox" name="remove_charging_mode">
                 </label>
-
                 <div class="comment">
                     Fixes issue causing the scooter to switch to charge mode with an external battery connected in parallel.
                 </div>
@@ -295,9 +308,9 @@
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/settings_remote-24px.svg" />
             <div class="paramblock">
                 <label>
-                    <bh5>Change ESC
+                    <h5>Change ESC
                         <->BMS baud rate to 76800:</h5>
-                            <input type="checkbox" name="bms_uart_76800">
+                    <input type="checkbox" name="bms_uart_76800">
                 </label>
                 <div class="comment">
                     Advanced setting for internal data transfer. Only useful if you install <a href="https://github.com/BotoX/xiaomi-m365-compatible-bms" target="_blank">compatible open source BMS</a>
@@ -313,7 +326,7 @@
                     <input name="wheel_speed_const" type="number" step="1" min="200" max="500" value="345" disabled>
                 </label>
                 <label>
-                    <input type="checkbox" onchange="CheckForm('wheel_speed_const', this);">Patch?</label>
+                    <input type="checkbox" onchange="CheckForm('wheel_speed_const', this);"> patch?</label>
                 <div class="comment">
                     For 10" wheels use 315, don't change otherwise.
                 </div>
