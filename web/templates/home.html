@@ -1,465 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="author" content="BotoX">
-<meta name="description" content="Xiaomi Mijia M365 Custom Firmware Toolkit">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-<title>Xiaomi Mijia M365 Custom Firmware Toolkit</title>
+    <meta charset="utf-8">
+    <meta name="author" content="BotoX">
+    <meta name="description" content="Xiaomi Mijia M365 Custom Firmware Toolkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Xiaomi Mijia M365 Custom Firmware Toolkit</title>
+    <link rel="stylesheet" type="text/css" href="data/custom-css-bootstrap-magic-2020-01-15.css">
+    <style>
+        #block {
+            border-width: 2px;
+            border-color: #4682B4;
+            background-color: #EEEEEE;
+            text-align: left;
+            margin-top: 2px;
+            overflow: hidden;
+            padding: 6px;
+        }
+        
+        img {
+            float: left;
+        }
+        
+        .comment {
+            font-style: italic;
+            width: 80em;
+        }
+        
+        .paramblock {
+            float: left;
+        }
+        
+        .patchbadge {
+            margin-top: -22px;
+        }
+    </style>
+
 </head>
 
-<body>
+<body style="padding: 10px">
 
-<div class="header">
-    <h1>Xiaomi Mijia M365 Custom Firmware Toolkit</h1>
-    <a href="https://hackm365.com/">Spanish</a>
-    <a href="https://spzjulien.com/CFW/">French</a>
-    <a href="http://cfw.rollerplausch.com/">German</a>
-    <a href="http://xn--80adrjrfh9d.xn--80atlli8e.xn--p1ai/">Russian</a>
-</div>
+    <div class="header">
+        <h2>Xiaomi Mijia M365 Custom Firmware Toolkit</h2>
+        <a href="https://hackm365.com/">Spanish</a>
+        <a href="https://spzjulien.com/CFW/">French</a>
+        <a href="http://cfw.rollerplausch.com/">German</a>
+        <a href="http://xn--80adrjrfh9d.xn--80atlli8e.xn--p1ai/">Russian</a>
+    </div>
 
-<div class="content">
-<p>
-    Configure your own custom firmware by adjusting the options below.<br>
-    There are safety checks in place to ensure your scooter will not be bricked.<br>
-    Be aware that a higher motor power will shorten the lifetime of your battery and could damage your motor.<br>
-    By default nothing will be patched, enable patches with the "Patch?" checkbox next to them.
-</p>
-
-<p>
-    Presets:
-    <button onclick="Preset_Default();">Default</button>
-    <button onclick="Preset_BotoX();">BotoX</button>
-    <button onclick="Preset_Rollerplausch();">Rollerplausch.com</button>
-    <button onclick="Preset_DYoC();">DYoC</button>
-</p>
-
-<noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
-
-<hr>
-<form action="/cfw">
-<ul>
-    <li>
-    <label><b>Base version of your firmware:</b>
-    <select name="version">
-        <option value="DRV143">1.4.3</option>
-        <option value="DRV142">1.4.2</option>
-        <option value="DRV141">1.4.1</option>
-        <option value="DRV140">1.4.0</option>
-        <option value="DRV138" selected>1.3.8</option>
-        <option value="DRV134">1.3.4</option>
-        <option value="DRV130">1.3.0</option>
-    </select></label>
-    <p>1.3.8 is recommended over 1.4.0, it provides a much smoother riding experience.</p>
-    </li>
-
-    <li>
-    <label><b>Auto-KERS min speed:</b>
-    <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h</label>
-    <label><input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
-    <p>
-        The scooter will start braking by itself when it goes above this speed and you're not accelerating.<br>
-        If you want "KERS OFF" then just put this to 40&nbsp;km/h.
-        You will still have recuperative braking when using the brake lever.<br>
+    <p>Configure your own custom firmware by adjusting the options below. There are safety checks in place to ensure your scooter will not be bricked.
+        <br> Be aware that a higher motor power will shorten the lifetime of your battery and could damage your motor. By default nothing will be patched, enable patches with the "Patch?" checkbox next to them.
     </p>
-    </li>
 
-    <li>
-    <label><b>Patch speed control params?</b>
-    <input type="checkbox" name="speed_params" onchange="CheckForm('speed_normal_kmh', this); CheckForm('speed_normal_phase', this); CheckForm('speed_normal_battery', this); CheckForm('speed_eco_kmh', this); CheckForm('speed_eco_phase', this); CheckForm('speed_eco_battery', this);"></label>
+    <h4>Presets</h4>
+    <button class="btn btn-sm btn-secondary" onclick="Preset_Default();">Default</button>
+
+    <button class="btn btn-sm btn-primary" onclick="Preset_BotoX();">BotoX</button>
+    <button class="btn btn-sm btn-primary" onclick="Preset_DYoC();">DYoC</button>
+
+    <button class="btn btn-sm btn-primary" onclick="Preset_Rollerplausch();">RollerPlausch</button>
+
+    <noscript>This website (despite it's look) requires some very simple JavaScript which is embedded in this HTML.</noscript>
+
+    <hr>
+    <form action="/cfw">
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/developer_board-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Base version of your firmware</h5>
+                    <select name="version">
+                        <option value="DRV143">1.4.3</option>
+                        <option value="DRV142">1.4.2</option>
+                        <option value="DRV141">1.4.1</option>
+                        <option value="DRV140">1.4.0</option>
+                        <option value="DRV138" selected>1.3.8</option>
+                        <option value="DRV134">1.3.4</option>
+                        <option value="DRV130">1.3.0</option>
+                    </select>
+                </label>
+                <div class="comment">1.3.8 is recommended over 1.4.0, it provides a much smoother riding experience.</div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/flip_camera_android-24px.svg" />
+
+            <div class="paramblock">
+                <label>
+                    <h5>Auto-KERS min speed</h5>
+                    <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('kers_min_speed', this);"> patch?</label>
+                <div class="comment">
+                    The scooter will start braking by itself when it goes above this speed and you're not accelerating.
+                    <br> If you want "KERS OFF" then just put this to 40&nbsp;km/h. You will still have recuperative braking when using the brake lever.
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/trending_up-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Speed control parameters</h5>
+                    <input type="checkbox" name="speed_params" onchange="CheckForm('speed_normal_kmh', this); CheckForm('speed_normal_phase', this); CheckForm('speed_normal_battery', this); CheckForm('speed_eco_kmh', this); CheckForm('speed_eco_phase', this); CheckForm('speed_eco_battery', this);">
+                </label>
+                <p>
+                    <label>Normal max speed:
+                        <input name="speed_normal_kmh" type="number" step="1" min="0" max="100" value="28" disabled>&nbsp;km/h</label>
+                    <br>
+                    <label>Normal max phase current:
+                        <input name="speed_normal_phase" type="number" step="1" min="0" max="65535" value="32000" disabled>&nbsp;mA</label>
+                    <br>
+                    <label>Normal max battery current:
+                        <input name="speed_normal_battery" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
+                </p>
+                <p>
+                    <label>Eco max speed:
+                        <input name="speed_eco_kmh" type="number" step="1" min="0" max="100" value="22" disabled>&nbsp;km/h</label>
+                    <br>
+                    <label>Eco max phase current:
+                        <input name="speed_eco_phase" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
+                    <br>
+                    <label>Eco max battery current:
+                        <input name="speed_eco_battery" type="number" step="1" min="0" max="65535" value="7000" disabled>&nbsp;mA</label>
+                </p>
+                <div class="comment" style="overflow: auto">
+                    <p>
+                        This setting was previously the "power constant" and it was split into several parameters. Rough guidelines: for normal mode, the max phase current is about 1.8x-2.0x the max battery current. For eco mode, the max phase is 2.0-2.5x the max battery current.
+                    </p>
+                    <p>
+                        The "power constant" corresponds (after conversion) to the "normal max battery current". To convert the old power constant to mA, use (51575/constant)*17000.
+                        <br/>Converted "old power constant": Original = 17000, DYoC = 22000, CFW2.0 Weak = 31200, CFW2.0 = 33700
+                    </p>
+                    Motor phases are PWM controlled and instantaneous current exceeds the average.
+
+                    <br/> For smoothness with stock battery (10S 42V 8A), set max to 31 km/h. For 12S battery (50V 12A), set max to 36 km/h
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/pan_tool-24px.svg" />
+
+            <div class="paramblock">
+                <label>
+                    <h5>Brake lever parameters</h5>
+                    <input type="checkbox" name="brake_params" onchange="CheckForm('brake_limit', this); CheckForm('brake_i_min', this); CheckForm('brake_i_max', this);">
+                </label>
+                <p>
+                    <label>Lever virtual limit (1-130):
+                        <input name="brake_limit" type="number" step="1" min="1" max="130" value="115" disabled>
+                    </label>
+                    <br>
+                    <label>Minimum phase current:
+                        <input name="brake_i_min" type="number" step="1" min="0" max="65535" value="8000" disabled onchange="GetForm('brake_i_max').min = this.value;">&nbsp;mA</label>
+                    <br>
+                    <label>Maximum phase current:
+                        <input name="brake_i_max" type="number" step="1" min="8000" max="65535" value="30000" disabled>&nbsp;mA</label>
+                </p>
+
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/play_circle_outline-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Motor start speed</h5>
+                    <input name="motor_start_speed" type="number" step="0.01" min="0" max="100" value="5.0" disabled>&nbsp;km/h</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('motor_start_speed', this);"> patch?</label>
+                <div class="comment">
+                    Minimum speed in km/h before the engine will start. Recommended between 1 and 4, a low start speed will require more power.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/forward_5-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Cruise control delay</h5>
+                    <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>&nbsp;seconds</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('cruise_control_delay', this);"> patch?</label>
+                <br>
+                <div class="comment">
+                    How many seconds it takes for cruise control to kick in and keep the same speed.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/volume_off-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Mute cruise control beep</h5>
+                    <input type="checkbox" name="cruise_control_nobeep">
+                </label>
+                <br>
+                <div class="comment">
+                    Check this to disable beep sound when cruise control is engaged.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/switch_camera-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Instant mode switch</h5>
+                    <input type="checkbox" name="instant_eco_switch">
+                </label>
+                <div class="comment">
+                    Switch instantly between Eco and Normal mode while driving. This can be very sudden and cause injuries so use with caution!
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/settings_power-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Boot with ECO mode</h5>
+                    <input type="checkbox" name="boot_with_eco">
+                </label>
+                <div class="comment">The scooter will always start in Eco mode.</div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/speed-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Russian throttle algorithm (from CFW):</h5>
+                    <input type="checkbox" name="russian_throttle">
+                </label>
+                <div class="comment">
+                    Changes the throttle algorithm from speed-control to power-control. Switching to russian throttle mode will ignore speed control parameters.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/flash_on-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Battery voltage limit:</h5>
+                    <input name="voltage_limit" type="number" step="0.01" min="43.01" max="100.00" value="43.01" disabled>&nbsp;Volt</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('voltage_limit', this);"> patch?</label>
+                <div class="comment">
+                    Change these settings if you want to connect a custom battery with a higher voltage (from stock 10S to 12S for example).
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/timer_off-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Remove hard speed limit of 35&nbsp;km/h:</h5>
+                    <input type="checkbox" name="remove_hard_speed_limit">
+                </label>
+                <div class="comment">
+                    Removes logic that checks that the speed is below 34.78km/h (12000/345). Custom batteries delivering a higher voltage may require this patch to reach higher speed.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/battery_alert-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Remove charging mode</h5>
+                    <input type="checkbox" name="remove_charging_mode">
+                </label>
+                <div class="comment">
+                    Fixes issue causing the scooter to switch to charge mode with an external battery connected in parallel.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/link_off-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Stay on when scooter is locked</h5>
+                    <input type="checkbox" name="stay_on_locked">
+                </label>
+                <div class="comment">
+                    Disables auto shutdown when the scooter is locked such that it stays on forever.
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/settings_remote-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Change ESC
+                        <->BMS baud rate to 76800:</h5>
+                    <input type="checkbox" name="bms_uart_76800">
+                </label>
+                <div class="comment">
+                    Advanced setting for internal data transfer. Only useful if you install <a href="https://github.com/BotoX/xiaomi-m365-compatible-bms" target="_blank">compatible open source BMS</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/slow_motion_video-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Wheel speed multiplier:</h5>
+                    <input name="wheel_speed_const" type="number" step="1" min="200" max="500" value="345" disabled>
+                </label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('wheel_speed_const', this);"> patch?</label>
+                <div class="comment">
+                    For 10" wheels use 315, don't change otherwise.
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <p>
+            Make sure to double check all of your entered values before submitting!
+            <br>
+            <b>I AM RESPONSIBLE FOR THE ENTERED VALUES:</b>
+            <input type="submit" value="Patch!" />
+            <button type="button" onclick="Share();">Share</button>
+            <span id="shareConfirmation"></span>
+        </p>
+    </form>
+
     <p>
-        <label>Normal max speed: <input name="speed_normal_kmh" type="number" step="1" min="0" max="100" value="28" disabled>&nbsp;km/h</label><br>
-        <label>Normal max phase current: <input name="speed_normal_phase" type="number" step="1" min="0" max="65535" value="32000" disabled>&nbsp;mA</label><br>
-        <label>Normal max battery current: <input name="speed_normal_battery" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
+        <b><span style="color: red;">&#9888;&nbsp;NEW </span>The tool now makes .zip files with both encrypted and unencrypted firmware and an info.txt inside.</b>
+        <br>
+        <b><span style="color: red;">&#9888;&nbsp;NEW </span>Use the following app made by <a href="https://github.com/CamiAlfa">CamiAlfa</a> to flash your modified firmware: <a href="https://play.google.com/store/apps/details?id=com.m365downgrade">m365 DownG</a></b>
+        <br> It will automatically chose the correct firmware for your scooter. Don't try to flash the .zip file with the old patched app!
     </p>
+
+    <hr>
     <p>
-        <label>Eco max speed: <input name="speed_eco_kmh" type="number" step="1" min="0" max="100" value="22" disabled>&nbsp;km/h</label><br>
-        <label>Eco max phase current: <input name="speed_eco_phase" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label><br>
-        <label>Eco max battery current: <input name="speed_eco_battery" type="number" step="1" min="0" max="65535" value="7000" disabled>&nbsp;mA</label>
+        Source code on GitHub: <a href="https://github.com/BotoX/xiaomi-m365-firmware-patcher" target="_blank">https://github.com/BotoX/xiaomi-m365-firmware-patcher</a>
+        <br>
+        <b>Donate: <a href="https://paypal.me/BotoXbz" target="_blank">https://paypal.me/BotoXbz</a></b>
     </p>
-    <p>
-        For Smoothness: Stock (10S) battery: Max 31 km/h, 12S battery: Max 36 km/h<br>
-        To convert the old power constant to mA, use (51575/constant)*17000<br>
-        Motor phases are PWM controlled and instantaneous current exceeds the average. As a rough guide, use 2.0-2.5x battery current.
-    </p>
-    </li>
 
-    <li>
-    <label><b>Patch brake lever params?</b>
-    <input type="checkbox" name="brake_params" onchange="CheckForm('brake_limit', this); CheckForm('brake_i_min', this); CheckForm('brake_i_max', this);"></label>
-    <p>
-        <label>Lever virtual limit (1-130): <input name="brake_limit" type="number" step="1" min="1" max="130" value="115" disabled></label><br>
-        <label>Minimum phase current: <input name="brake_i_min" type="number" step="1" min="0" max="65535" value="8000" disabled onchange="GetForm('brake_i_max').min = this.value;">&nbsp;mA</label><br>
-        <label>Maximum phase current: <input name="brake_i_max" type="number" step="1" min="8000" max="65535" value="30000" disabled>&nbsp;mA</label>
-    </p>
-    </li>
+    <script>
+        var forms = {
+            "VERSION": "version",
+            "KERS_MIN_SPEED": "kers_min_speed",
+            "SPEED_PARAMS": "speed_params",
+            "SPEED_NORMAL_KMH": "speed_normal_kmh",
+            "SPEED_NORMAL_PHASE": "speed_normal_phase",
+            "SPEED_NORMAL_BATTERY": "speed_normal_battery",
+            "SPEED_ECO_KMH": "speed_eco_kmh",
+            "SPEED_ECO_PHASE": "speed_eco_phase",
+            "SPEED_ECO_BATTERY": "speed_eco_battery",
+            "BRAKE_PARAMS": "brake_params",
+            "BRAKE_LIMIT": "brake_limit",
+            "BRAKE_I_MIN": "brake_i_min",
+            "BRAKE_I_MAX": "brake_i_max",
+            "MOTOR_START_SPEED": "motor_start_speed",
+            "CRUISE_CONTROL_DELAY": "cruise_control_delay",
+            "CRUISE_CONTROL_NOBEEP": "cruise_control_nobeep",
+            "INSTANT_ECO_SWITCH": "instant_eco_switch",
+            "BOOT_WITH_ECO": "boot_with_eco",
+            "RUSSIAN_THROTTLE": "russian_throttle",
+            "VOLTAGE_LIMIT": "voltage_limit",
+            "REMOVE_HARD_SPEED_LIMIT": "remove_hard_speed_limit",
+            "REMOVE_CHARGING_MODE": "remove_charging_mode",
+            "STAY_ON_LOCKED": "stay_on_locked",
+            "BMS_UART_76800": "bms_uart_76800",
+            "WHEEL_SPEED_CONST": "wheel_speed_const"
+        };
 
-    <li>
-    <label><b>Motor start speed:</b>
-    <input name="motor_start_speed" type="number" step="0.01" min="0" max="100" value="5.0" disabled>&nbsp;km/h</label>
-    <label><input type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
-    <p>Minimum speed in km/h before the engine will start.</p>
-    </li>
+        var formValues = Object.values(forms);
+        var queryStrings = window.location.search.substring(1);
+        var queries = queryStrings.split('&');
 
-    <li>
-    <label><b>Cruise control delay:</b>
-    <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>&nbsp;seconds</label>
-    <label><input type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label>
-    <br>
-    <p>How many seconds it takes for cruise control to kick in.</p>
-    </li>
+        for (var i = 0; i < queries.length; i++) {
+            var query = queries[i];
+            var tmp = query.split('=');
+            var found = false;
 
-    <li>
-    <label><b>Cruise control no beep:</b>
-    <input type="checkbox" name="cruise_control_nobeep"></label>
-    <br>
-    <p>Disables beep sound when cruise control enables.</p>
-    </li>
+            for (var j = 0; j < formValues.length; j++) {
+                if (formValues[j] === tmp[0]) {
+                    found = true;
+                    break;
+                }
+            }
 
-    <li>
-    <label><b>Instant mode switch:</b>
-    <input type="checkbox" name="instant_eco_switch"></label>
-    <p>
-        Switch instantly between Eco and Normal mode while driving.<br>
-        Warning! This can be very sudden and cause injury!
-    </p>
-    </li>
+            if (found) {
+                if (tmp[1] === 'on') {
+                    tmp[1] = true;
+                }
 
-    <li>
-    <label><b>Boot with ECO mode:</b>
-    <input type="checkbox" name="boot_with_eco"></label>
-    <p>The scooter will always start in Eco mode.</p>
-    </li>
-
-    <li>
-    <label><b>Russian throttle algorithm (from CFW):</b>
-    <input type="checkbox" name="russian_throttle"></label>
-    <p>
-        Changes the throttle algorithm from speed-control to power-control.<br>
-        Ignores speed control params.
-    </p>
-    </li>
-
-    <li>
-    <label><b>Battery voltage limit:</b>
-    <input name="voltage_limit" type="number" step="0.01" min="43.01" max="100.00" value="43.01" disabled>&nbsp;Volt</label>
-    <label><input type="checkbox" onchange="CheckForm('voltage_limit', this);">Patch?</label>
-    <p>If you want to connect a custom battery with a higher voltage.</p>
-    </li>
-
-    <li>
-    <label><b>Remove hard speed limit of 35&nbsp;km/h:</b>
-    <input type="checkbox" name="remove_hard_speed_limit"></label>
-    <p>Removes code which checks that the speed is below 34.78km/h (12000/345).</p>
-    </li>
-
-    <li>
-    <label><b>Remove charging mode:</b>
-    <input type="checkbox" name="remove_charging_mode"></label>
-    <p>Fixes issue of scooter going into charge mode with an external battery connected in parallel.</p>
-    </li>
-
-    <li>
-    <label><b>Stay on when scooter is locked:</b>
-    <input type="checkbox" name="stay_on_locked"></label>
-    <p>Disables auto shutdown when the scooter is locked so it stays on forever.</p>
-    </li>
-
-    <li>
-    <label><b>Change ESC<->BMS baud rate to 76800:</b>
-    <input type="checkbox" name="bms_uart_76800"></label>
-    <p>Only if you use the <a href="https://github.com/BotoX/xiaomi-m365-compatible-bms" target="_blank">compatible open source BMS</a>!</p>
-    </li>
-
-    <li>
-    <label><b>Wheel speed multiplier:</b>
-    <input name="wheel_speed_const" type="number" step="1" min="200" max="500" value="345" disabled></label>
-    <label><input type="checkbox" onchange="CheckForm('wheel_speed_const', this);">Patch?</label>
-    <p>For 10" wheels use 315, don't change otherwise.</p>
-    </li>
-</ul>
-<hr>
-
-<p>
-    Make sure to double check all of your entered values before submitting!<br>
-    <b>I AM RESPONSIBLE FOR THE ENTERED VALUES:</b>
-    <input type="submit" value="Patch!"/>
-    <button type="button" onclick="Share();">Share</button>
-    <span id="shareConfirmation"></span>
-</p>
-</form>
-
-<p>
-    <b><span style="color: red;">&#9888;&nbsp;NEW </span>The tool now makes .zip files with both encrypted and unencrypted firmware and an info.txt inside.</b><br>
-    <b><span style="color: red;">&#9888;&nbsp;NEW </span>Use the following app made by <a href="https://github.com/CamiAlfa">CamiAlfa</a> to flash your modified firmware: <a href="https://play.google.com/store/apps/details?id=com.m365downgrade">m365 DownG</a></b><br>
-    It will automatically chose the correct firmware for your scooter. Don't try to flash the .zip file with the old patched app!
-</p>
-
-<hr>
-<p>
-    Source code on GitHub: <a href="https://github.com/BotoX/xiaomi-m365-firmware-patcher" target="_blank">https://github.com/BotoX/xiaomi-m365-firmware-patcher</a>
-    <br>
-    <b>Donate: <a href="https://paypal.me/BotoXbz" target="_blank">https://paypal.me/BotoXbz</a></b>
-</p>
-</div>
-
-<script>
-    var forms = {
-        "VERSION": "version",
-        "KERS_MIN_SPEED": "kers_min_speed",
-        "SPEED_PARAMS": "speed_params",
-        "SPEED_NORMAL_KMH": "speed_normal_kmh",
-        "SPEED_NORMAL_PHASE": "speed_normal_phase",
-        "SPEED_NORMAL_BATTERY": "speed_normal_battery",
-        "SPEED_ECO_KMH": "speed_eco_kmh",
-        "SPEED_ECO_PHASE": "speed_eco_phase",
-        "SPEED_ECO_BATTERY": "speed_eco_battery",
-        "BRAKE_PARAMS": "brake_params",
-        "BRAKE_LIMIT": "brake_limit",
-        "BRAKE_I_MIN": "brake_i_min",
-        "BRAKE_I_MAX": "brake_i_max",
-        "MOTOR_START_SPEED": "motor_start_speed",
-        "CRUISE_CONTROL_DELAY": "cruise_control_delay",
-        "CRUISE_CONTROL_NOBEEP": "cruise_control_nobeep",
-        "INSTANT_ECO_SWITCH": "instant_eco_switch",
-        "BOOT_WITH_ECO": "boot_with_eco",
-        "RUSSIAN_THROTTLE": "russian_throttle",
-        "VOLTAGE_LIMIT": "voltage_limit",
-        "REMOVE_HARD_SPEED_LIMIT": "remove_hard_speed_limit",
-        "REMOVE_CHARGING_MODE": "remove_charging_mode",
-        "STAY_ON_LOCKED": "stay_on_locked",
-        "BMS_UART_76800": "bms_uart_76800",
-        "WHEEL_SPEED_CONST": "wheel_speed_const"
-    };
-
-    var formValues = Object.values(forms);
-    var queryStrings = window.location.search.substring(1);
-    var queries = queryStrings.split('&');
-
-    for (var i = 0; i < queries.length; i++) {
-        var query = queries[i];
-        var tmp = query.split('=');
-        var found = false;
-
-        for (var j = 0; j < formValues.length; j++) {
-            if (formValues[j] === tmp[0]) {
-                found = true;
-                break;
+                ChangeForm(tmp[0], tmp[1], true);
             }
         }
 
-        if(found) {
-            if (tmp[1] === 'on') {
-                tmp[1] = true;
+        function GetForm(name) {
+            return document.getElementsByName(name)[0];
+        }
+
+        function GetFormValue(name) {
+            var o = GetForm(name);
+
+            if (o.type === "checkbox") {
+                return o.checked;
             }
 
-            ChangeForm(tmp[0], tmp[1], true);
-        }
-    }
-
-    function GetForm(name) {
-        return document.getElementsByName(name)[0];
-    }
-
-    function GetFormValue(name) {
-        var o = GetForm(name);
-
-        if (o.type === "checkbox") {
-            return o.checked;
+            return o.value;
         }
 
-        return o.value;
-    }
-
-    function GetPatchCheckBox(name) {
-        var form = GetForm(name);
-        if(form.type != "checkbox") {
-            return form.parentElement && form.parentElement.nextElementSibling && form.parentElement.nextElementSibling.children[0];
-        }
-    }
-
-    function CheckForm(name, cb) {
-        GetForm(name).disabled = !cb.checked;
-    }
-
-    function ChangeForm(name, value, patch) {
-        var o = GetForm(name);
-
-        if (o.type === "checkbox") {
-            o.checked = value;
-        } else {
-            o.value = value;
-        }
-        if(o.onchange) { o.onchange(); }
-
-        if (typeof patch === 'boolean') {
-            var cb = GetPatchCheckBox(name);
-
-            if (cb) {
-                cb.checked = patch;
-                if(cb.onchange) { cb.onchange(); }
+        function GetPatchCheckBox(name) {
+            var form = GetForm(name);
+            if (form.type != "checkbox") {
+                return form.parentElement && form.parentElement.nextElementSibling && form.parentElement.nextElementSibling.children[0];
             }
         }
-    }
 
-    function Preset_Default() {
-        ChangeForm(forms.VERSION, "DRV138");
-        ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
-        ChangeForm(forms.SPEED_PARAMS, false);
-        ChangeForm(forms.SPEED_NORMAL_KMH, "28");
-        ChangeForm(forms.SPEED_NORMAL_PHASE, 32000);
-        ChangeForm(forms.SPEED_NORMAL_BATTERY, 17000);
-        ChangeForm(forms.SPEED_ECO_KMH, "22");
-        ChangeForm(forms.SPEED_ECO_PHASE, 17000);
-        ChangeForm(forms.SPEED_ECO_BATTERY, 7000);
-        ChangeForm(forms.BRAKE_PARAMS, false);
-        ChangeForm(forms.BRAKE_LIMIT, "115");
-        ChangeForm(forms.BRAKE_I_MIN, "8000");
-        ChangeForm(forms.BRAKE_I_MAX, "30000");
-        ChangeForm(forms.MOTOR_START_SPEED, "5.0", false);
-        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
-        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
-        ChangeForm(forms.INSTANT_ECO_SWITCH, false);
-        ChangeForm(forms.BOOT_WITH_ECO, false);
-        ChangeForm(forms.RUSSIAN_THROTTLE, false);
-        ChangeForm(forms.VOLTAGE_LIMIT, "43.01", false);
-        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
-        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
-        ChangeForm(forms.STAY_ON_LOCKED, false);
-        ChangeForm(forms.BMS_UART_76800, false);
-        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
-    }
-
-    function Preset_BotoX() {
-        ChangeForm(forms.VERSION, "DRV138");
-        ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
-        ChangeForm(forms.SPEED_PARAMS, true);
-        ChangeForm(forms.SPEED_NORMAL_KMH, "31");
-        ChangeForm(forms.SPEED_NORMAL_PHASE, 60000);
-        ChangeForm(forms.SPEED_NORMAL_BATTERY, 30000);
-        ChangeForm(forms.SPEED_ECO_KMH, "26");
-        ChangeForm(forms.SPEED_ECO_PHASE, 50000);
-        ChangeForm(forms.SPEED_ECO_BATTERY, 20000);
-        ChangeForm(forms.BRAKE_PARAMS, true);
-        ChangeForm(forms.BRAKE_LIMIT, "115");
-        ChangeForm(forms.BRAKE_I_MIN, "8000");
-        ChangeForm(forms.BRAKE_I_MAX, "50000");
-        ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
-        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
-        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
-        ChangeForm(forms.INSTANT_ECO_SWITCH, true);
-        ChangeForm(forms.BOOT_WITH_ECO, false);
-        ChangeForm(forms.RUSSIAN_THROTTLE, false);
-        ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
-        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, true);
-        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
-        ChangeForm(forms.STAY_ON_LOCKED, true);
-        ChangeForm(forms.BMS_UART_76800, false);
-        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
-    }
-
-    function Preset_Rollerplausch() {
-        ChangeForm(forms.VERSION, "DRV138");
-        ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
-        ChangeForm(forms.SPEED_PARAMS, true);
-        ChangeForm(forms.SPEED_NORMAL_KMH, "30");
-        ChangeForm(forms.SPEED_NORMAL_PHASE, 50000);
-        ChangeForm(forms.SPEED_NORMAL_BATTERY, 26500);
-        ChangeForm(forms.SPEED_ECO_KMH, "19");
-        ChangeForm(forms.SPEED_ECO_PHASE, 30000);
-        ChangeForm(forms.SPEED_ECO_BATTERY, 15000);
-        ChangeForm(forms.BRAKE_PARAMS, true);
-        ChangeForm(forms.BRAKE_LIMIT, "115");
-        ChangeForm(forms.BRAKE_I_MIN, "8000");
-        ChangeForm(forms.BRAKE_I_MAX, "45000");
-        ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
-        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
-        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
-        ChangeForm(forms.INSTANT_ECO_SWITCH, true);
-        ChangeForm(forms.BOOT_WITH_ECO, true);
-        ChangeForm(forms.RUSSIAN_THROTTLE, false);
-        ChangeForm(forms.VOLTAGE_LIMIT, "43.01", false);
-        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, true);
-        ChangeForm(forms.REMOVE_CHARGING_MODE, true);
-        ChangeForm(forms.STAY_ON_LOCKED, true);
-        ChangeForm(forms.BMS_UART_76800, false);
-        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
-    }
-
-    function Preset_DYoC() {
-        ChangeForm(forms.VERSION, "DRV138");
-        ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
-        ChangeForm(forms.SPEED_PARAMS, false);
-        ChangeForm(forms.SPEED_NORMAL_KMH, "31");
-        ChangeForm(forms.SPEED_NORMAL_PHASE, 41000);
-        ChangeForm(forms.SPEED_NORMAL_BATTERY, 22000);
-        ChangeForm(forms.SPEED_ECO_KMH, "20");
-        ChangeForm(forms.SPEED_ECO_PHASE, 22000);
-        ChangeForm(forms.SPEED_ECO_BATTERY, 9000);
-        ChangeForm(forms.BRAKE_PARAMS, false);
-        ChangeForm(forms.BRAKE_LIMIT, "115");
-        ChangeForm(forms.BRAKE_I_MIN, "8000");
-        ChangeForm(forms.BRAKE_I_MAX, "38500");
-        ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
-        ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
-        ChangeForm(forms.INSTANT_ECO_SWITCH, false);
-        ChangeForm(forms.BOOT_WITH_ECO, false);
-        ChangeForm(forms.RUSSIAN_THROTTLE, false);
-        ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
-        ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
-        ChangeForm(forms.REMOVE_CHARGING_MODE, false);
-        ChangeForm(forms.STAY_ON_LOCKED, false);
-        ChangeForm(forms.BMS_UART_76800, false);
-        ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
-    }
-
-    function Share() {
-        var url = location.protocol + '//' + location.host;
-        var firstParam = true;
-
-        function getSeparator() {
-            if (firstParam) {
-                firstParam = false;
-                return '?';
-            }
-
-            return '&';
+        function CheckForm(name, cb) {
+            GetForm(name).disabled = !cb.checked;
         }
 
-        for (var i = 0; i < formValues.length; i++) {
-            var form = formValues[i];
+        function ChangeForm(name, value, patch) {
+            var o = GetForm(name);
 
-            var formValue = GetFormValue(form);
-            var patchCheckbox = GetPatchCheckBox(form);
+            if (o.type === "checkbox") {
+                o.checked = value;
+            } else {
+                o.value = value;
+            }
+            if (o.onchange) {
+                o.onchange();
+            }
 
-            if (patchCheckbox) {
-                if (patchCheckbox.checked) {
+            if (typeof patch === 'boolean') {
+                var cb = GetPatchCheckBox(name);
+
+                if (cb) {
+                    cb.checked = patch;
+                    if (cb.onchange) {
+                        cb.onchange();
+                    }
+                }
+            }
+        }
+
+        function Preset_Default() {
+            ChangeForm(forms.VERSION, "DRV138");
+            ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
+            ChangeForm(forms.SPEED_PARAMS, false);
+            ChangeForm(forms.SPEED_NORMAL_KMH, "28");
+            ChangeForm(forms.SPEED_NORMAL_PHASE, 32000);
+            ChangeForm(forms.SPEED_NORMAL_BATTERY, 17000);
+            ChangeForm(forms.SPEED_ECO_KMH, "22");
+            ChangeForm(forms.SPEED_ECO_PHASE, 17000);
+            ChangeForm(forms.SPEED_ECO_BATTERY, 7000);
+            ChangeForm(forms.BRAKE_PARAMS, false);
+            ChangeForm(forms.BRAKE_LIMIT, "115");
+            ChangeForm(forms.BRAKE_I_MIN, "8000");
+            ChangeForm(forms.BRAKE_I_MAX, "30000");
+            ChangeForm(forms.MOTOR_START_SPEED, "5.0", false);
+            ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
+            ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
+            ChangeForm(forms.INSTANT_ECO_SWITCH, false);
+            ChangeForm(forms.BOOT_WITH_ECO, false);
+            ChangeForm(forms.RUSSIAN_THROTTLE, false);
+            ChangeForm(forms.VOLTAGE_LIMIT, "43.01", false);
+            ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
+            ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+            ChangeForm(forms.STAY_ON_LOCKED, false);
+            ChangeForm(forms.BMS_UART_76800, false);
+            ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
+        }
+
+        function Preset_BotoX() {
+            ChangeForm(forms.VERSION, "DRV138");
+            ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
+            ChangeForm(forms.SPEED_PARAMS, true);
+            ChangeForm(forms.SPEED_NORMAL_KMH, "31");
+            ChangeForm(forms.SPEED_NORMAL_PHASE, 60000);
+            ChangeForm(forms.SPEED_NORMAL_BATTERY, 30000);
+            ChangeForm(forms.SPEED_ECO_KMH, "26");
+            ChangeForm(forms.SPEED_ECO_PHASE, 50000);
+            ChangeForm(forms.SPEED_ECO_BATTERY, 20000);
+            ChangeForm(forms.BRAKE_PARAMS, true);
+            ChangeForm(forms.BRAKE_LIMIT, "115");
+            ChangeForm(forms.BRAKE_I_MIN, "8000");
+            ChangeForm(forms.BRAKE_I_MAX, "50000");
+            ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
+            ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
+            ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
+            ChangeForm(forms.INSTANT_ECO_SWITCH, true);
+            ChangeForm(forms.BOOT_WITH_ECO, false);
+            ChangeForm(forms.RUSSIAN_THROTTLE, false);
+            ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
+            ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, true);
+            ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+            ChangeForm(forms.STAY_ON_LOCKED, true);
+            ChangeForm(forms.BMS_UART_76800, false);
+            ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
+        }
+
+        function Preset_Rollerplausch() {
+            ChangeForm(forms.VERSION, "DRV138");
+            ChangeForm(forms.KERS_MIN_SPEED, "40.0", true);
+            ChangeForm(forms.SPEED_PARAMS, true);
+            ChangeForm(forms.SPEED_NORMAL_KMH, "30");
+            ChangeForm(forms.SPEED_NORMAL_PHASE, 50000);
+            ChangeForm(forms.SPEED_NORMAL_BATTERY, 26500);
+            ChangeForm(forms.SPEED_ECO_KMH, "19");
+            ChangeForm(forms.SPEED_ECO_PHASE, 30000);
+            ChangeForm(forms.SPEED_ECO_BATTERY, 15000);
+            ChangeForm(forms.BRAKE_PARAMS, true);
+            ChangeForm(forms.BRAKE_LIMIT, "115");
+            ChangeForm(forms.BRAKE_I_MIN, "8000");
+            ChangeForm(forms.BRAKE_I_MAX, "45000");
+            ChangeForm(forms.MOTOR_START_SPEED, "3.0", true);
+            ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
+            ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
+            ChangeForm(forms.INSTANT_ECO_SWITCH, true);
+            ChangeForm(forms.BOOT_WITH_ECO, true);
+            ChangeForm(forms.RUSSIAN_THROTTLE, false);
+            ChangeForm(forms.VOLTAGE_LIMIT, "43.01", false);
+            ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, true);
+            ChangeForm(forms.REMOVE_CHARGING_MODE, true);
+            ChangeForm(forms.STAY_ON_LOCKED, true);
+            ChangeForm(forms.BMS_UART_76800, false);
+            ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
+        }
+
+        function Preset_DYoC() {
+            ChangeForm(forms.VERSION, "DRV138");
+            ChangeForm(forms.KERS_MIN_SPEED, "6.0", false);
+            ChangeForm(forms.SPEED_PARAMS, false);
+            ChangeForm(forms.SPEED_NORMAL_KMH, "31");
+            ChangeForm(forms.SPEED_NORMAL_PHASE, 41000);
+            ChangeForm(forms.SPEED_NORMAL_BATTERY, 22000);
+            ChangeForm(forms.SPEED_ECO_KMH, "20");
+            ChangeForm(forms.SPEED_ECO_PHASE, 22000);
+            ChangeForm(forms.SPEED_ECO_BATTERY, 9000);
+            ChangeForm(forms.BRAKE_PARAMS, false);
+            ChangeForm(forms.BRAKE_LIMIT, "115");
+            ChangeForm(forms.BRAKE_I_MIN, "8000");
+            ChangeForm(forms.BRAKE_I_MAX, "38500");
+            ChangeForm(forms.CRUISE_CONTROL_DELAY, "5.0", false);
+            ChangeForm(forms.CRUISE_CONTROL_NOBEEP, false);
+            ChangeForm(forms.INSTANT_ECO_SWITCH, false);
+            ChangeForm(forms.BOOT_WITH_ECO, false);
+            ChangeForm(forms.RUSSIAN_THROTTLE, false);
+            ChangeForm(forms.VOLTAGE_LIMIT, "52.00", true);
+            ChangeForm(forms.REMOVE_HARD_SPEED_LIMIT, false);
+            ChangeForm(forms.REMOVE_CHARGING_MODE, false);
+            ChangeForm(forms.STAY_ON_LOCKED, false);
+            ChangeForm(forms.BMS_UART_76800, false);
+            ChangeForm(forms.WHEEL_SPEED_CONST, 345, false);
+        }
+
+        function Share() {
+            var url = location.protocol + '//' + location.host;
+            var firstParam = true;
+
+            function getSeparator() {
+                if (firstParam) {
+                    firstParam = false;
+                    return '?';
+                }
+
+                return '&';
+            }
+
+            for (var i = 0; i < formValues.length; i++) {
+                var form = formValues[i];
+
+                var formValue = GetFormValue(form);
+                var patchCheckbox = GetPatchCheckBox(form);
+
+                if (patchCheckbox) {
+                    if (patchCheckbox.checked) {
+                        url += getSeparator() + form + '=' + formValue;
+                    }
+                } else if (typeof formValue === 'boolean') {
+                    if (formValue) {
+                        url += getSeparator() + form + '=on';
+                    }
+                } else {
                     url += getSeparator() + form + '=' + formValue;
                 }
-            } else if (typeof formValue === 'boolean') {
-                if (formValue) {
-                    url += getSeparator() + form + '=on';
-                }
-            } else {
-                url += getSeparator() + form + '=' + formValue;
             }
+
+            var textArea = document.createElement("textarea");
+
+            textArea.value = url;
+            document.body.appendChild(textArea);
+
+            textArea.focus();
+            textArea.select();
+
+            document.execCommand('copy');
+            document.getElementById('shareConfirmation').innerText = 'Copied!';
+
+            document.body.removeChild(textArea);
         }
-
-        var textArea = document.createElement("textarea");
-
-        textArea.value = url;
-        document.body.appendChild(textArea);
-
-        textArea.focus();
-        textArea.select();
-
-        document.execCommand('copy');
-        document.getElementById('shareConfirmation').innerText = 'Copied!';
-
-        document.body.removeChild(textArea);
-    }
-</script>
+    </script>
 
 </body>
