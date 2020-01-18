@@ -16,6 +16,7 @@
             border-color: #4682B4;
             background-color: #EEEEEE;
             text-align: left;
+			margin-top:2px;
             overflow: hidden;
             padding: 6px;
         }
@@ -27,6 +28,10 @@
         .comment {
             font-style: italic;
         }
+		
+		.paramblock {
+			float:left;
+		}
     </style>
 </head>
 
@@ -58,244 +63,260 @@
     <form action="/cfw">
 
         <div id="block">
-
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/developer_board-24px.svg" />
-
-            <label>
-                <h5>Base version of your firmware</h5>
-                <select name="version">
-                    <option value="DRV143">1.4.3</option>
-                    <option value="DRV142">1.4.2</option>
-                    <option value="DRV141">1.4.1</option>
-                    <option value="DRV140">1.4.0</option>
-                    <option value="DRV138" selected>1.3.8</option>
-                    <option value="DRV134">1.3.4</option>
-                    <option value="DRV130">1.3.0</option>
-                </select>
-            </label>
-            <div class="comment">1.3.8 is recommended over 1.4.0, it provides a much smoother riding experience.</div>
+            <div class="paramblock">
+                <label>
+                    <h5>Base version of your firmware</h5>
+                    <select name="version">
+                        <option value="DRV143">1.4.3</option>
+                        <option value="DRV142">1.4.2</option>
+                        <option value="DRV141">1.4.1</option>
+                        <option value="DRV140">1.4.0</option>
+                        <option value="DRV138" selected>1.3.8</option>
+                        <option value="DRV134">1.3.4</option>
+                        <option value="DRV130">1.3.0</option>
+                    </select>
+                </label>
+                <div class="comment">1.3.8 is recommended over 1.4.0, it provides a much smoother riding experience.</div>
+            </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/flip_camera_android-24px.svg" />
 
-            <label>
-                <h5>Auto-KERS min speed</h5>
-                <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h</label>
-            <label>
-                <input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
-            <div class="comment">
-                The scooter will start braking by itself when it goes above this speed and you're not accelerating.
-                <br> If you want "KERS OFF" then just put this to 40&nbsp;km/h. You will still have recuperative braking when using the brake lever.
-                <br>
+            <div class="paramblock">
+                <label>
+                    <h5>Auto-KERS min speed</h5>
+                    <input name="kers_min_speed" type="number" step="0.1" min="0" max="100" value="6.0" disabled>&nbsp;km/h</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('kers_min_speed', this);">Patch?</label>
+                <div class="comment">
+                    The scooter will start braking by itself when it goes above this speed and you're not accelerating.
+                    <br> If you want "KERS OFF" then just put this to 40&nbsp;km/h. You will still have recuperative braking when using the brake lever.
+                    <br>
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/trending_up-24px.svg" />
-
-            <label>
-                <h5>Speed control parameters</h5>
-                <input type="checkbox" name="speed_params" onchange="CheckForm('speed_normal_kmh', this); CheckForm('speed_normal_phase', this); CheckForm('speed_normal_battery', this); CheckForm('speed_eco_kmh', this); CheckForm('speed_eco_phase', this); CheckForm('speed_eco_battery', this);">
-            </label>
-            <p>
-                <label>Normal max speed:
-                    <input name="speed_normal_kmh" type="number" step="1" min="0" max="100" value="28" disabled>&nbsp;km/h</label>
-                <br>
-                <label>Normal max phase current:
-                    <input name="speed_normal_phase" type="number" step="1" min="0" max="65535" value="32000" disabled>&nbsp;mA</label>
-                <br>
-                <label>Normal max battery current:
-                    <input name="speed_normal_battery" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
-            </p>
-            <p>
-                <label>Eco max speed:
-                    <input name="speed_eco_kmh" type="number" step="1" min="0" max="100" value="22" disabled>&nbsp;km/h</label>
-                <br>
-                <label>Eco max phase current:
-                    <input name="speed_eco_phase" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
-                <br>
-                <label>Eco max battery current:
-                    <input name="speed_eco_battery" type="number" step="1" min="0" max="65535" value="7000" disabled>&nbsp;mA</label>
-            </p>
-            <div class="comment">
-                For smoothness with stock battery (10S 42V 8A), set max to 31 km/h. For 12S battery (50V 12A), set max to 36 km/h
-                <br> To convert the old power constant to mA, use (51575/constant)*17000. Motor phases are PWM controlled and instantaneous current exceeds the average. As a rough guide, use 2.0-2.5x battery current.
-            </div>
-        </div>
-
-        <div id="block">
-            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/trending_up-24px.svg" />
-
-            <label>
-                <h5>Brake lever parameters</h5>
-                <input type="checkbox" name="brake_params" onchange="CheckForm('brake_limit', this); CheckForm('brake_i_min', this); CheckForm('brake_i_max', this);">
-            </label>
-            <p>
-                <label>Lever virtual limit (1-130):
-                    <input name="brake_limit" type="number" step="1" min="1" max="130" value="115" disabled>
+            <div class="paramblock">
+                <label>
+                    <h5>Speed control parameters</h5>
+                    <input type="checkbox" name="speed_params" onchange="CheckForm('speed_normal_kmh', this); CheckForm('speed_normal_phase', this); CheckForm('speed_normal_battery', this); CheckForm('speed_eco_kmh', this); CheckForm('speed_eco_phase', this); CheckForm('speed_eco_battery', this);">
                 </label>
-                <br>
-                <label>Minimum phase current:
-                    <input name="brake_i_min" type="number" step="1" min="0" max="65535" value="8000" disabled onchange="GetForm('brake_i_max').min = this.value;">&nbsp;mA</label>
-                <br>
-                <label>Maximum phase current:
-                    <input name="brake_i_max" type="number" step="1" min="8000" max="65535" value="30000" disabled>&nbsp;mA</label>
-            </p>
-
-            <div class="comment">
-                Be careful with these settings as they may easily lead to injuries.
+                <p>
+                    <label>Normal max speed:
+                        <input name="speed_normal_kmh" type="number" step="1" min="0" max="100" value="28" disabled>&nbsp;km/h</label>
+                    <br>
+                    <label>Normal max phase current:
+                        <input name="speed_normal_phase" type="number" step="1" min="0" max="65535" value="32000" disabled>&nbsp;mA</label>
+                    <br>
+                    <label>Normal max battery current:
+                        <input name="speed_normal_battery" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
+                </p>
+                <p>
+                    <label>Eco max speed:
+                        <input name="speed_eco_kmh" type="number" step="1" min="0" max="100" value="22" disabled>&nbsp;km/h</label>
+                    <br>
+                    <label>Eco max phase current:
+                        <input name="speed_eco_phase" type="number" step="1" min="0" max="65535" value="17000" disabled>&nbsp;mA</label>
+                    <br>
+                    <label>Eco max battery current:
+                        <input name="speed_eco_battery" type="number" step="1" min="0" max="65535" value="7000" disabled>&nbsp;mA</label>
+                </p>
+                <div class="comment">
+                    For smoothness with stock battery (10S 42V 8A), set max to 31 km/h. For 12S battery (50V 12A), set max to 36 km/h
+                    <br> To convert the old power constant to mA, use (51575/constant)*17000. Motor phases are PWM controlled and instantaneous current exceeds the average. As a rough guide, use 2.0-2.5x battery current.
+                </div>
             </div>
+        </div>
 
+        <div id="block">
+            <img style="background-position: top left; margin-right:15px; width: 4em" src="data/pan_tool-24px.svg" />
+
+            <div class="paramblock">
+                <label>
+                    <h5>Brake lever parameters</h5>
+                    <input type="checkbox" name="brake_params" onchange="CheckForm('brake_limit', this); CheckForm('brake_i_min', this); CheckForm('brake_i_max', this);">
+                </label>
+                <p>
+                    <label>Lever virtual limit (1-130):
+                        <input name="brake_limit" type="number" step="1" min="1" max="130" value="115" disabled>
+                    </label>
+                    <br>
+                    <label>Minimum phase current:
+                        <input name="brake_i_min" type="number" step="1" min="0" max="65535" value="8000" disabled onchange="GetForm('brake_i_max').min = this.value;">&nbsp;mA</label>
+                    <br>
+                    <label>Maximum phase current:
+                        <input name="brake_i_max" type="number" step="1" min="8000" max="65535" value="30000" disabled>&nbsp;mA</label>
+                </p>
+
+                <div class="comment">
+                    Be careful with these settings as they may easily lead to injuries.
+                </div>
+            </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/play_circle_outline-24px.svg" />
-
-            <label>
-                <h5>Motor start speed</h5>
-                <input name="motor_start_speed" type="number" step="0.01" min="0" max="100" value="5.0" disabled>&nbsp;km/h</label>
-            <label>
-                <input type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
-            <div class="comment">
-                Minimum speed in km/h before the engine will start. Recommended between 1 and 4, a low start speed will require more power.
+            <div class="paramblock">
+                <label>
+                    <h5>Motor start speed</h5>
+                    <input name="motor_start_speed" type="number" step="0.01" min="0" max="100" value="5.0" disabled>&nbsp;km/h</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('motor_start_speed', this);">Patch?</label>
+                <div class="comment">
+                    Minimum speed in km/h before the engine will start. Recommended between 1 and 4, a low start speed will require more power.
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/forward_5-24px.svg" />
-
-            <label><b>Cruise control delay</b>
-                <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>&nbsp;seconds</label>
-            <label>
-                <input type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label>
-            <br>
-            <div class="comment">
-                How many seconds it takes for cruise control to kick in and keep the same speed.
+            <div class="paramblock">
+                <label><b>Cruise control delay</b>
+                    <input name="cruise_control_delay" type="number" step="0.1" min="0.1" max="20" value="5.0" disabled>&nbsp;seconds</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('cruise_control_delay', this);">Patch?</label>
+                <br>
+                <div class="comment">
+                    How many seconds it takes for cruise control to kick in and keep the same speed.
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/volume_off-24px.svg" />
-
-            <label>
-                <h5>Mute cruise control beep</h5>
-                <input type="checkbox" name="cruise_control_nobeep">
-            </label>
-            <br>
-            <div class="comment">
-                Check this to disable beep sound when cruise control is engaged.
+            <div class="paramblock">
+                <label>
+                    <h5>Mute cruise control beep</h5>
+                    <input type="checkbox" name="cruise_control_nobeep">
+                </label>
+                <br>
+                <div class="comment">
+                    Check this to disable beep sound when cruise control is engaged.
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/switch_camera-24px.svg" />
-
-            <label>
-                <h5>Instant mode switch</h5>
-                <input type="checkbox" name="instant_eco_switch">
-            </label>
-            <div class="comment">
-                Switch instantly between Eco and Normal mode while driving. This can be very sudden and cause injuries so use with caution!
+            <div class="paramblock">
+                <label>
+                    <h5>Instant mode switch</h5>
+                    <input type="checkbox" name="instant_eco_switch">
+                </label>
+                <div class="comment">
+                    Switch instantly between Eco and Normal mode while driving. This can be very sudden and cause injuries so use with caution!
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/settings_power-24px.svg" />
-
-            <label>
-                <h5>Boot with ECO mode</h5>
-                <input type="checkbox" name="boot_with_eco">
-            </label>
-            <div class="comment">The scooter will always start in Eco mode.</div>
+            <div class="paramblock">
+                <label>
+                    <h5>Boot with ECO mode</h5>
+                    <input type="checkbox" name="boot_with_eco">
+                </label>
+                <div class="comment">The scooter will always start in Eco mode.</div>
+            </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/speed-24px.svg" />
-
-            <label>
-                <h5>Russian throttle algorithm (from CFW):</h5>
-                <input type="checkbox" name="russian_throttle">
-            </label>
-            <div class="comment">
-                Changes the throttle algorithm from speed-control to power-control. Switching to russian throttle mode will ignore speed control parameters.
+            <div class="paramblock">
+                <label>
+                    <h5>Russian throttle algorithm (from CFW):</h5>
+                    <input type="checkbox" name="russian_throttle">
+                </label>
+                <div class="comment">
+                    Changes the throttle algorithm from speed-control to power-control. Switching to russian throttle mode will ignore speed control parameters.
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/flash_on-24px.svg" />
-
-            <label>
-                <h5>Battery voltage limit:</h5>
-                <input name="voltage_limit" type="number" step="0.01" min="43.01" max="100.00" value="43.01" disabled>&nbsp;Volt</label>
-            <label>
-                <input type="checkbox" onchange="CheckForm('voltage_limit', this);">Patch?</label>
-            <div class="comment">
-                Change these settings if you want to connect a custom battery with a higher voltage (from stock 10S to 12S for example).
+            <div class="paramblock">
+                <label>
+                    <h5>Battery voltage limit:</h5>
+                    <input name="voltage_limit" type="number" step="0.01" min="43.01" max="100.00" value="43.01" disabled>&nbsp;Volt</label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('voltage_limit', this);">Patch?</label>
+                <div class="comment">
+                    Change these settings if you want to connect a custom battery with a higher voltage (from stock 10S to 12S for example).
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/timer_off-24px.svg" />
-
-            <label>
-                <h5>Remove hard speed limit of 35&nbsp;km/h:</h5>
-                <input type="checkbox" name="remove_hard_speed_limit">
-            </label>
-            <div class="comment">
-                Removes logic that checks that the speed is below 34.78km/h (12000/345).
+            <div class="paramblock">
+                <label>
+                    <h5>Remove hard speed limit of 35&nbsp;km/h:</h5>
+                    <input type="checkbox" name="remove_hard_speed_limit">
+                </label>
+                <div class="comment">
+                    Removes logic that checks that the speed is below 34.78km/h (12000/345).
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/battery_alert-24px.svg" />
+            <div class="paramblock">
+                <label>
+                    <h5>Remove charging mode</h5>
+                    <input type="checkbox" name="remove_charging_mode">
+                </label>
 
-            <label>
-                <h5>Remove charging mode</h5>
-                <input type="checkbox" name="remove_charging_mode">
-            </label>
-
-            <div class="comment">
-                Fixes issue causing the scooter to switch to charge mode with an external battery connected in parallel.
+                <div class="comment">
+                    Fixes issue causing the scooter to switch to charge mode with an external battery connected in parallel.
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/link_off-24px.svg" />
-
-            <label>
-                <h5>Stay on when scooter is locked</h5>
-                <input type="checkbox" name="stay_on_locked">
-            </label>
-            <div class="comment">
-                Disables auto shutdown when the scooter is locked such that it stays on forever.
+            <div class="paramblock">
+                <label>
+                    <h5>Stay on when scooter is locked</h5>
+                    <input type="checkbox" name="stay_on_locked">
+                </label>
+                <div class="comment">
+                    Disables auto shutdown when the scooter is locked such that it stays on forever.
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/settings_remote-24px.svg" />
-
-            <label>
-                <bh5>Change ESC
-                    <->BMS baud rate to 76800:</h5>
-                        <input type="checkbox" name="bms_uart_76800">
-            </label>
-            <div class="comment">
-                Advanced setting for internal data transfer. Only useful if you install <a href="https://github.com/BotoX/xiaomi-m365-compatible-bms" target="_blank">compatible open source BMS</a>
+            <div class="paramblock">
+                <label>
+                    <bh5>Change ESC
+                        <->BMS baud rate to 76800:</h5>
+                            <input type="checkbox" name="bms_uart_76800">
+                </label>
+                <div class="comment">
+                    Advanced setting for internal data transfer. Only useful if you install <a href="https://github.com/BotoX/xiaomi-m365-compatible-bms" target="_blank">compatible open source BMS</a>
+                </div>
             </div>
         </div>
 
         <div id="block">
             <img style="background-position: top left; margin-right:15px; width: 4em" src="data/slow_motion_video-24px.svg" />
-
-            <label>
-                <h5>Wheel speed multiplier:</h5>
-                <input name="wheel_speed_const" type="number" step="1" min="200" max="500" value="345" disabled>
-            </label>
-            <label>
-                <input type="checkbox" onchange="CheckForm('wheel_speed_const', this);">Patch?</label>
-            <div class="comment">
-                For 10" wheels use 315, don't change otherwise.
+            <div class="paramblock">
+                <label>
+                    <h5>Wheel speed multiplier:</h5>
+                    <input name="wheel_speed_const" type="number" step="1" min="200" max="500" value="345" disabled>
+                </label>
+                <label>
+                    <input type="checkbox" onchange="CheckForm('wheel_speed_const', this);">Patch?</label>
+                <div class="comment">
+                    For 10" wheels use 315, don't change otherwise.
+                </div>
             </div>
         </div>
 
